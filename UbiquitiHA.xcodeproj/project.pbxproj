@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		820C22622E8ECD7000519DB2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 820C22492E8ECD6E00519DB2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 820C22502E8ECD6E00519DB2;
+			remoteInfo = UbiquitiHA;
+		};
+		820C226C2E8ECD7000519DB2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 820C22492E8ECD6E00519DB2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 820C22502E8ECD6E00519DB2;
+			remoteInfo = UbiquitiHA;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		820C22512E8ECD6E00519DB2 /* UbiquitiHA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UbiquitiHA.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		820C22612E8ECD7000519DB2 /* UbiquitiHATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UbiquitiHATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		820C226B2E8ECD7000519DB2 /* UbiquitiHAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UbiquitiHAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		820C22532E8ECD6E00519DB2 /* UbiquitiHA */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UbiquitiHA;
+			sourceTree = "<group>";
+		};
+		820C22642E8ECD7000519DB2 /* UbiquitiHATests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UbiquitiHATests;
+			sourceTree = "<group>";
+		};
+		820C226E2E8ECD7000519DB2 /* UbiquitiHAUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UbiquitiHAUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		820C224E2E8ECD6E00519DB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		820C225E2E8ECD7000519DB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		820C22682E8ECD7000519DB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		820C22482E8ECD6E00519DB2 = {
+			isa = PBXGroup;
+			children = (
+				820C22532E8ECD6E00519DB2 /* UbiquitiHA */,
+				820C22642E8ECD7000519DB2 /* UbiquitiHATests */,
+				820C226E2E8ECD7000519DB2 /* UbiquitiHAUITests */,
+				820C22522E8ECD6E00519DB2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		820C22522E8ECD6E00519DB2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				820C22512E8ECD6E00519DB2 /* UbiquitiHA.app */,
+				820C22612E8ECD7000519DB2 /* UbiquitiHATests.xctest */,
+				820C226B2E8ECD7000519DB2 /* UbiquitiHAUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		820C22502E8ECD6E00519DB2 /* UbiquitiHA */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 820C22752E8ECD7000519DB2 /* Build configuration list for PBXNativeTarget "UbiquitiHA" */;
+			buildPhases = (
+				820C224D2E8ECD6E00519DB2 /* Sources */,
+				820C224E2E8ECD6E00519DB2 /* Frameworks */,
+				820C224F2E8ECD6E00519DB2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				820C22532E8ECD6E00519DB2 /* UbiquitiHA */,
+			);
+			name = UbiquitiHA;
+			packageProductDependencies = (
+			);
+			productName = UbiquitiHA;
+			productReference = 820C22512E8ECD6E00519DB2 /* UbiquitiHA.app */;
+			productType = "com.apple.product-type.application";
+		};
+		820C22602E8ECD7000519DB2 /* UbiquitiHATests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 820C22782E8ECD7000519DB2 /* Build configuration list for PBXNativeTarget "UbiquitiHATests" */;
+			buildPhases = (
+				820C225D2E8ECD7000519DB2 /* Sources */,
+				820C225E2E8ECD7000519DB2 /* Frameworks */,
+				820C225F2E8ECD7000519DB2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				820C22632E8ECD7000519DB2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				820C22642E8ECD7000519DB2 /* UbiquitiHATests */,
+			);
+			name = UbiquitiHATests;
+			packageProductDependencies = (
+			);
+			productName = UbiquitiHATests;
+			productReference = 820C22612E8ECD7000519DB2 /* UbiquitiHATests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		820C226A2E8ECD7000519DB2 /* UbiquitiHAUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 820C227B2E8ECD7000519DB2 /* Build configuration list for PBXNativeTarget "UbiquitiHAUITests" */;
+			buildPhases = (
+				820C22672E8ECD7000519DB2 /* Sources */,
+				820C22682E8ECD7000519DB2 /* Frameworks */,
+				820C22692E8ECD7000519DB2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				820C226D2E8ECD7000519DB2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				820C226E2E8ECD7000519DB2 /* UbiquitiHAUITests */,
+			);
+			name = UbiquitiHAUITests;
+			packageProductDependencies = (
+			);
+			productName = UbiquitiHAUITests;
+			productReference = 820C226B2E8ECD7000519DB2 /* UbiquitiHAUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		820C22492E8ECD6E00519DB2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1610;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					820C22502E8ECD6E00519DB2 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					820C22602E8ECD7000519DB2 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 820C22502E8ECD6E00519DB2;
+					};
+					820C226A2E8ECD7000519DB2 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 820C22502E8ECD6E00519DB2;
+					};
+				};
+			};
+			buildConfigurationList = 820C224C2E8ECD6E00519DB2 /* Build configuration list for PBXProject "UbiquitiHA" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 820C22482E8ECD6E00519DB2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 820C22522E8ECD6E00519DB2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				820C22502E8ECD6E00519DB2 /* UbiquitiHA */,
+				820C22602E8ECD7000519DB2 /* UbiquitiHATests */,
+				820C226A2E8ECD7000519DB2 /* UbiquitiHAUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		820C224F2E8ECD6E00519DB2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		820C225F2E8ECD7000519DB2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		820C22692E8ECD7000519DB2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		820C224D2E8ECD6E00519DB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		820C225D2E8ECD7000519DB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		820C22672E8ECD7000519DB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		820C22632E8ECD7000519DB2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 820C22502E8ECD6E00519DB2 /* UbiquitiHA */;
+			targetProxy = 820C22622E8ECD7000519DB2 /* PBXContainerItemProxy */;
+		};
+		820C226D2E8ECD7000519DB2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 820C22502E8ECD6E00519DB2 /* UbiquitiHA */;
+			targetProxy = 820C226C2E8ECD7000519DB2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		820C22732E8ECD7000519DB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		820C22742E8ECD7000519DB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		820C22762E8ECD7000519DB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"UbiquitiHA/Preview Content\"";
+				DEVELOPMENT_TEAM = 8JH59DJ45H;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = geo.ivannikov.UbiquitiHA;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		820C22772E8ECD7000519DB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"UbiquitiHA/Preview Content\"";
+				DEVELOPMENT_TEAM = 8JH59DJ45H;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = geo.ivannikov.UbiquitiHA;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		820C22792E8ECD7000519DB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8JH59DJ45H;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = geo.ivannikov.UbiquitiHATests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UbiquitiHA.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UbiquitiHA";
+			};
+			name = Debug;
+		};
+		820C227A2E8ECD7000519DB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8JH59DJ45H;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = geo.ivannikov.UbiquitiHATests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UbiquitiHA.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UbiquitiHA";
+			};
+			name = Release;
+		};
+		820C227C2E8ECD7000519DB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8JH59DJ45H;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = geo.ivannikov.UbiquitiHAUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UbiquitiHA;
+			};
+			name = Debug;
+		};
+		820C227D2E8ECD7000519DB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8JH59DJ45H;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = geo.ivannikov.UbiquitiHAUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UbiquitiHA;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		820C224C2E8ECD6E00519DB2 /* Build configuration list for PBXProject "UbiquitiHA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				820C22732E8ECD7000519DB2 /* Debug */,
+				820C22742E8ECD7000519DB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		820C22752E8ECD7000519DB2 /* Build configuration list for PBXNativeTarget "UbiquitiHA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				820C22762E8ECD7000519DB2 /* Debug */,
+				820C22772E8ECD7000519DB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		820C22782E8ECD7000519DB2 /* Build configuration list for PBXNativeTarget "UbiquitiHATests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				820C22792E8ECD7000519DB2 /* Debug */,
+				820C227A2E8ECD7000519DB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		820C227B2E8ECD7000519DB2 /* Build configuration list for PBXNativeTarget "UbiquitiHAUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				820C227C2E8ECD7000519DB2 /* Debug */,
+				820C227D2E8ECD7000519DB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 820C22492E8ECD6E00519DB2 /* Project object */;
+}
