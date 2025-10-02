@@ -56,15 +56,15 @@ extension Pokemon {
 
 // MARK: - Mapping
 
-//extension Pokemon {
-//    init(detail: PokemonDetailResponse) {
-//        self.id = detail.id
-//        self.name = detail.name.capitalized
-//        self.number = String(format: "#%03d", detail.id)
-//        self.types = detail.types.map { $0.type.name.capitalized }
-//        self.imgURL = detail.sprites.other.officialArtwork.frontDefault
-//        self.height = detail.height
-//        self.weight = detail.weight
-//        self.baseExperience = detail.baseExperience
-//    }
-//}
+extension Pokemon {
+    init(detail: PokemonDetailResponse) {
+        self.id = detail.id
+        self.name = detail.name.capitalized
+        self.number = String(format: "#%03d", detail.id)
+        self.types = detail.types.map { $0.type.name.capitalized }
+        self.imgURL = detail.sprites.other.officialArtwork.frontDefault
+        self.height = detail.height
+        self.weight = detail.weight
+        self.baseExperience = detail.baseExperience
+    }
+}

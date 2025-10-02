@@ -2,7 +2,7 @@
 //  UbiquitiHAApp.swift
 //  UbiquitiHA
 //
-//  Created by Ivannikov-EXTERNAL Georgiy on 02.10.2025.
+//  Created by Ivannikov Georgiy on 02.10.2025.
 //
 
 import SwiftUI
@@ -11,7 +11,17 @@ import SwiftUI
 struct UbiquitiHAApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            let coordinator = Coordinator()
+
+            RootView().environmentObject(coordinator)
         }
+    }
+    
+    init() {
+        setupDependencies()
+    }
+    
+    private func setupDependencies() {
+        DIContainer.shared.registerAll()
     }
 }
