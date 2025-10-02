@@ -16,8 +16,8 @@ struct RootView: View {
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .detail(let pokemon):
-//                    TODO: Display details
-                        EmptyView()
+                        let detailVM = PokemonDetailViewModel(pokemon: pokemon)
+                        PokemonDetailView(viewModel: detailVM)
                     }
                 }
         }
