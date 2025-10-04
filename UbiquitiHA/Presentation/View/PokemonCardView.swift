@@ -31,14 +31,13 @@ struct PokemonCardView: View {
                     .foregroundColor(.white.opacity(0.2))
                     .padding(.trailing, 8)
                 Spacer()
-                AsyncImage(url: URL(string: pokemon.imgURL)) { phase in
-                    if case .success(let image) = phase {
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    } else {
-                            Image.hiddenDefault
-                    }
+                if let imageData = pokemon.imageData,
+                   let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Image.hiddenDefault
                 }
             }
         }

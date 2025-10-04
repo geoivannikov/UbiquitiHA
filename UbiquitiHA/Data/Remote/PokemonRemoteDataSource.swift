@@ -11,6 +11,7 @@ protocol PokemonRemoteDataSourceProtocol {
     func fetchPokemonsList(offset: Int, limit: Int) async throws -> PokemonListResponse
     func fetchPokemon(url: String) async throws -> PokemonDetailResponse
     func fetchPokemonDescription(name: String) async throws -> PokemonSpeciesResponse
+    func fetchImageData(from urlString: String) async throws -> Data
 }
 
 final class PokemonRemoteDataSource: PokemonRemoteDataSourceProtocol {
@@ -36,6 +37,21 @@ final class PokemonRemoteDataSource: PokemonRemoteDataSourceProtocol {
     func fetchPokemonDescription(name: String) async throws -> PokemonSpeciesResponse {
         let endpoint = "\(baseURL)/pokemon-species/\(name)"
         return try await fetch(urlString: endpoint, as: PokemonSpeciesResponse.self)
+    }
+    
+    func fetchImageData(from urlString: String) async throws -> Data {
+        guard let url = URL(string: urlString) else {
+            throw APIError.invalidURL(urlString)
+        }
+        
+        let (data, response) = try await session.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200..<300).contains(httpResponse.statusCode) else {
+            throw APIError.invalidResponse(nil)
+        }
+        
+        return data
     }
 
     // MARK: - Private helpers

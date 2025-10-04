@@ -5,6 +5,8 @@
 //  Created by Ivannikov Georgiy on 02.10.2025.
 //
 
+import Foundation
+
 protocol LoadPokemonsUseCaseProtocol {
     func execute(offset: Int, limit: Int) async throws -> [Pokemon]
 }
@@ -34,6 +36,27 @@ final class LoadPokemonsUseCase: LoadPokemonsUseCaseProtocol {
             }
         }
 
-        return detailResponses.map(Pokemon.init)
+        // Загружаем изображения параллельно через remoteDataSource
+        let pokemonsWithImages: [Pokemon] = try await withThrowingTaskGroup(of: Pokemon?.self) { group in
+            detailResponses.forEach { detail in
+                group.addTask {
+                    do {
+                        let imageData = try await self.remoteDataSource.fetchImageData(from: detail.sprites.other.officialArtwork.frontDefault)
+                        return Pokemon(detail: detail, imageData: imageData)
+                    } catch {
+                        print("Failed to load image: \(detail.sprites.other.officialArtwork.frontDefault) - \(error.localizedDescription)")
+                        return Pokemon(detail: detail, imageData: nil)
+                    }
+                }
+            }
+
+            return try await group.reduce(into: []) { result, next in
+                if let pokemon = next {
+                    result.append(pokemon)
+                }
+            }
+        }
+
+        return pokemonsWithImages
     }
 }

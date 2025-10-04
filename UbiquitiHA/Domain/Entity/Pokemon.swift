@@ -12,7 +12,7 @@ struct Pokemon: Identifiable, Decodable {
     let name: String
     let number: String
     let types: [String]
-    let imgURL: String
+    let imageData: Data?
     let height: Int
     let weight: Int
     let baseExperience: Int
@@ -57,12 +57,12 @@ extension Pokemon {
 // MARK: - Mapping
 
 extension Pokemon {
-    init(detail: PokemonDetailResponse) {
+    init(detail: PokemonDetailResponse, imageData: Data? = nil) {
         self.id = detail.id
         self.name = detail.name.capitalized
         self.number = String(format: "#%03d", detail.id)
         self.types = detail.types.map { $0.type.name.capitalized }
-        self.imgURL = detail.sprites.other.officialArtwork.frontDefault
+        self.imageData = imageData
         self.height = detail.height
         self.weight = detail.weight
         self.baseExperience = detail.baseExperience

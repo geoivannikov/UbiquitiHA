@@ -19,8 +19,8 @@ struct PokemonListView: View {
 
     var body: some View {
         ZStack {
-            if viewModel.isLoading {
-                ProgressView()
+            if viewModel.isLoading && viewModel.pokemons.isEmpty {
+                ProgressView("Loading Pokemons...")
                     .padding()
             }
             ScrollView {
@@ -30,6 +30,8 @@ struct PokemonListView: View {
                         PokemonListItem(pokemon: pokemon, isLast: isLast) {
                             Task { await viewModel.loadNextPage() }
                         }
+                        .id("pokemon-\(pokemon.id)")
+                        .frame(minHeight: 120)
                     }
                 }
                 .padding()
@@ -61,5 +63,7 @@ private struct PokemonListItem: View {
         .onAppear {
             if isLast { onAppear() }
         }
+        .transition(.opacity.combined(with: .scale(scale: 0.95)))
+        .animation(.easeInOut(duration: 0.3), value: pokemon.id)
     }
 }
