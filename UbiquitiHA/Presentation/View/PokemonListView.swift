@@ -39,9 +39,9 @@ struct PokemonListView: View {
             .scrollIndicators(.hidden)
             .scrollBounceBehavior(.basedOnSize)
         }
-        .navigationTitle("Pokedex")
+        .navigationTitle("UbiquitiHA")
         .navigationBarTitleDisplayMode(.large)
-        .task {
+        .onLoad {
             await viewModel.loadNextPage()
         }
     }

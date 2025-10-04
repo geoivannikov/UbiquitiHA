@@ -2,7 +2,7 @@
 //  PokemonDetailView.swift
 //  UbiquitiHA
 //
-//  Created by Ivannikov-EXTERNAL Georgiy on 02.10.2025.
+//  Created by Ivannikov Georgiy on 02.10.2025.
 //
 
 import SwiftUI
@@ -38,7 +38,7 @@ struct PokemonDetailView: View {
                 }
             }
             .background(
-                Color.white
+                Color(.systemBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 24))
                     .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
             )
@@ -61,7 +61,7 @@ struct PokemonDetailView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
-            .task {
+            .onLoad {
                 await viewModel.load()
             }
             .alert("Error", isPresented: .constant(viewModel.errorMessage != nil), actions: {
@@ -114,6 +114,7 @@ private struct InfoSection: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Info")
                 .font(.headline)
+                .foregroundColor(.primary)
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Base exp:").sectionLabel()
@@ -138,6 +139,7 @@ private struct TypeSection: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Type")
                 .font(.headline)
+                .foregroundColor(.primary)
             HStack {
                 ForEach(types, id: \.self) { type in
                     Text(type.capitalized)

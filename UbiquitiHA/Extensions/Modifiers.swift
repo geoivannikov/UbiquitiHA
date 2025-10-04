@@ -11,7 +11,7 @@ struct SectionLabelModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(size: 14, weight: .semibold))
-            .foregroundColor(.gray)
+            .foregroundColor(.primary.opacity(0.6))
     }
 }
 
@@ -19,6 +19,7 @@ struct SectionValueModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(size: 14))
+            .foregroundColor(.primary)
     }
 }
 
@@ -26,9 +27,9 @@ struct CardBackgroundModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .background(Color.white)
+            .background(Color(.systemBackground))
             .cornerRadius(10)
-            .shadow(color: .gray, radius: 5, x: 0, y: 3)
+            .shadow(color: .primary.opacity(0.1), radius: 5, x: 0, y: 3)
     }
 }
 
