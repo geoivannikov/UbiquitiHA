@@ -15,66 +15,28 @@ protocol PokemonRemoteDataSourceProtocol {
 }
 
 final class PokemonRemoteDataSource: PokemonRemoteDataSourceProtocol {
-    private let session: URLSession
+    private let networkService: NetworkServiceProtocol
     private let baseURL = "https://pokeapi.co/api/v2"
 
-    init(session: URLSession = .shared) {
-        self.session = session
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
     }
 
     func fetchPokemonsList(offset: Int, limit: Int) async throws -> PokemonListResponse {
         let endpoint = "\(baseURL)/pokemon?limit=\(limit)&offset=\(offset)"
-        return try await fetch(urlString: endpoint, as: PokemonListResponse.self)
+        return try await networkService.fetch(urlString: endpoint, as: PokemonListResponse.self)
     }
 
     func fetchPokemon(url: String) async throws -> PokemonDetailResponse {
-        guard let url = URL(string: url) else {
-            throw APIError.invalidURL(url)
-        }
-        return try await fetch(url: url, as: PokemonDetailResponse.self)
+        try await networkService.fetch(urlString: url, as: PokemonDetailResponse.self)
     }
 
     func fetchPokemonDescription(name: String) async throws -> PokemonSpeciesResponse {
         let endpoint = "\(baseURL)/pokemon-species/\(name)"
-        return try await fetch(urlString: endpoint, as: PokemonSpeciesResponse.self)
+        return try await networkService.fetch(urlString: endpoint, as: PokemonSpeciesResponse.self)
     }
     
     func fetchImageData(from urlString: String) async throws -> Data {
-        guard let url = URL(string: urlString) else {
-            throw APIError.invalidURL(urlString)
-        }
-        
-        let (data, response) = try await session.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200..<300).contains(httpResponse.statusCode) else {
-            throw APIError.invalidResponse(nil)
-        }
-        
-        return data
-    }
-
-    // MARK: - Private helpers
-
-    private func fetch<T: Decodable>(urlString: String, as type: T.Type) async throws -> T {
-        guard let url = URL(string: urlString) else {
-            throw APIError.invalidURL(urlString)
-        }
-        return try await fetch(url: url, as: type)
-    }
-
-    private func fetch<T: Decodable>(url: URL, as type: T.Type) async throws -> T {
-        let (data, response) = try await session.data(from: url)
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200..<300).contains(httpResponse.statusCode) else {
-            throw APIError.invalidResponse(nil)
-        }
-
-        do {
-            return try JSONDecoder().decode(T.self, from: data)
-        } catch {
-            throw APIError.decodingFailed(error)
-        }
+        return try await networkService.fetchData(from: urlString)
     }
 }

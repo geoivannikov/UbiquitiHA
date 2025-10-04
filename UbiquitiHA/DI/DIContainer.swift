@@ -31,8 +31,12 @@ final class DIContainer: Resolver {
     }
     
     func registerAll() {
+        DIContainer.shared.register(NetworkServiceProtocol.self) {
+            NetworkService()
+        }
+        
         DIContainer.shared.register(PokemonRemoteDataSourceProtocol.self) {
-            PokemonRemoteDataSource()
+            PokemonRemoteDataSource(networkService: DIContainer.shared.resolve())
         }
         
         DIContainer.shared.register(LoadPokemonsUseCaseProtocol.self) {
