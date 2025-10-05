@@ -20,13 +20,7 @@ struct PokemonListView: View {
     var body: some View {
         ZStack {
             if viewModel.isLoading && viewModel.pokemons.isEmpty {
-                VStack {
-                    ProgressView()
-                        .scaleEffect(1.2)
-                    Text("Loading...")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                }
+                ProgressView()
             }
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {

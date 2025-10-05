@@ -90,7 +90,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         let detailResponses: [PokemonDetailResponse] = try await withThrowingTaskGroup(of: PokemonDetailResponse?.self) { group in
             missingIds.forEach { id in
                 group.addTask {
-                    try? await self.remoteDataSource.fetchPokemon(url: "https://pokeapi.co/api/v2/pokemon/\(id)")
+                    try? await self.remoteDataSource.fetchPokemon(id: id)
                 }
             }
 
@@ -105,7 +105,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
             detailResponses.forEach { detail in
                 group.addTask {
                     do {
-                        let imageData = try await self.remoteDataSource.fetchImageData(from: detail.sprites.other.officialArtwork.frontDefault)
+                        let imageData = try await self.remoteDataSource.fetchPokemonImage(from: detail)
                         return Pokemon(detail: detail, imageData: imageData)
                     } catch {
                         return Pokemon(detail: detail, imageData: nil)

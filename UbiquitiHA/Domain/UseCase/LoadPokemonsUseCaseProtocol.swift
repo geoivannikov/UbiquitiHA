@@ -14,11 +14,11 @@ protocol LoadPokemonsUseCaseProtocol {
 final class LoadPokemonsUseCase: LoadPokemonsUseCaseProtocol {
     private let repository: PokemonRepositoryProtocol
 
-    init(repository: PokemonRepositoryProtocol = DIContainer.shared.resolve()) {
+    init(repository: PokemonRepositoryProtocol) {
         self.repository = repository
     }
 
     func execute(offset: Int, limit: Int) async throws -> [Pokemon] {
-        return try await repository.fetchPokemons(offset: offset, limit: limit)
+        try await repository.fetchPokemons(offset: offset, limit: limit)
     }
 }

@@ -12,7 +12,7 @@ protocol LoadPokemonDescriptionUseCaseProtocol {
 final class LoadPokemonDescriptionUseCase: LoadPokemonDescriptionUseCaseProtocol {
     private let repository: PokemonRepositoryProtocol
 
-    init(repository: PokemonRepositoryProtocol = DIContainer.shared.resolve()) {
+    init(repository: PokemonRepositoryProtocol) {
         self.repository = repository
     }
 

@@ -9,9 +9,9 @@ import Foundation
 
 protocol PokemonRemoteDataSourceProtocol {
     func fetchPokemonsList(offset: Int, limit: Int) async throws -> PokemonListResponse
-    func fetchPokemon(url: String) async throws -> PokemonDetailResponse
+    func fetchPokemon(id: Int) async throws -> PokemonDetailResponse
     func fetchPokemonDescription(name: String) async throws -> PokemonSpeciesResponse
-    func fetchImageData(from urlString: String) async throws -> Data
+    func fetchPokemonImage(from response: PokemonDetailResponse) async throws -> Data
 }
 
 final class PokemonRemoteDataSource: PokemonRemoteDataSourceProtocol {
@@ -23,12 +23,13 @@ final class PokemonRemoteDataSource: PokemonRemoteDataSourceProtocol {
     }
 
     func fetchPokemonsList(offset: Int, limit: Int) async throws -> PokemonListResponse {
-        let endpoint = "\(baseURL)/pokemon?limit=\(limit)&offset=\(offset)"
-        return try await networkService.fetch(urlString: endpoint, as: PokemonListResponse.self)
+        let url = "\(baseURL)/pokemon?limit=\(limit)&offset=\(offset)"
+        return try await networkService.fetch(urlString: url, as: PokemonListResponse.self)
     }
 
-    func fetchPokemon(url: String) async throws -> PokemonDetailResponse {
-        try await networkService.fetch(urlString: url, as: PokemonDetailResponse.self)
+    func fetchPokemon(id: Int) async throws -> PokemonDetailResponse {
+        let url = "https://pokeapi.co/api/v2/pokemon/\(id)"
+        return try await networkService.fetch(urlString: url, as: PokemonDetailResponse.self)
     }
 
     func fetchPokemonDescription(name: String) async throws -> PokemonSpeciesResponse {
@@ -36,7 +37,8 @@ final class PokemonRemoteDataSource: PokemonRemoteDataSourceProtocol {
         return try await networkService.fetch(urlString: endpoint, as: PokemonSpeciesResponse.self)
     }
     
-    func fetchImageData(from urlString: String) async throws -> Data {
-        return try await networkService.fetchData(from: urlString)
+    func fetchPokemonImage(from response: PokemonDetailResponse) async throws -> Data {
+        let url = response.sprites.other.officialArtwork.frontDefault
+        return try await networkService.fetchData(from: url)
     }
 }
