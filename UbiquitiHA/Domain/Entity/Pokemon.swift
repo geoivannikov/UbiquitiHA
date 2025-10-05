@@ -18,6 +18,32 @@ struct Pokemon: Identifiable, Decodable {
     let baseExperience: Int
 }
 
+// MARK: - Mapping
+
+extension Pokemon {
+    init(detail: PokemonDetailResponse, imageData: Data? = nil) {
+        self.id = detail.id
+        self.name = detail.name.capitalized
+        self.number = String(format: "#%03d", detail.id)
+        self.types = detail.types.map { $0.type.name.capitalized }
+        self.imageData = imageData
+        self.height = detail.height
+        self.weight = detail.weight
+        self.baseExperience = detail.baseExperience
+    }
+    
+    init(from model: PokemonModel) {
+        self.id = model.id
+        self.name = model.name
+        self.number = model.number
+        self.types = model.types
+        self.imageData = model.imageData
+        self.height = model.height
+        self.weight = model.weight
+        self.baseExperience = model.baseExperience
+    }
+}
+
 // MARK: - UI Helpers
 
 extension Pokemon {
@@ -51,20 +77,5 @@ extension Pokemon {
         }()
 
         return baseColor.opacity(0.8)
-    }
-}
-
-// MARK: - Mapping
-
-extension Pokemon {
-    init(detail: PokemonDetailResponse, imageData: Data? = nil) {
-        self.id = detail.id
-        self.name = detail.name.capitalized
-        self.number = String(format: "#%03d", detail.id)
-        self.types = detail.types.map { $0.type.name.capitalized }
-        self.imageData = imageData
-        self.height = detail.height
-        self.weight = detail.weight
-        self.baseExperience = detail.baseExperience
     }
 }

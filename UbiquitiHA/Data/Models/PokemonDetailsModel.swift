@@ -14,8 +14,6 @@ final class PokemonDetailsModel: DatabaseModel {
     var pokemonDescription: String?
     var abilities: [String]
     var stats: [String: Int]
-    var createdAt: Date
-    var updatedAt: Date
     
     init(pokemonId: Int, description: String? = nil, abilities: [String] = [], 
          stats: [String: Int] = [:]) {
@@ -23,11 +21,5 @@ final class PokemonDetailsModel: DatabaseModel {
         self.pokemonDescription = description
         self.abilities = abilities
         self.stats = stats
-        self.createdAt = Date()
-        self.updatedAt = Date()
-    }
-    
-    func updateTimestamp() {
-        self.updatedAt = Date()
     }
 }

@@ -35,7 +35,7 @@ struct PokemonDetailView: View {
                                         species: viewModel.details.species,
                                         formsCount: viewModel.details.formsCount)
                             TypeSection(types: viewModel.details.types,
-                                        color: viewModel.details.backgroundColor)
+                                        color: viewModel.backgroundColor)
                             Spacer(minLength: 40)
                         }
                         .padding(20)

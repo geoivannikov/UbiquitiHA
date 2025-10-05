@@ -17,7 +17,6 @@ struct PokemonDetails {
     let species: String
     let types: [String]
     let formsCount: Int
-    let backgroundColor: Color
 }
 
 // MARK: - Init with Data
@@ -33,7 +32,6 @@ extension PokemonDetails {
         self.species = pokemonSpeciesResponse.genus
         self.types = pokemon.types
         self.formsCount = pokemonSpeciesResponse.formsCount
-        self.backgroundColor = pokemon.backgroundColor
     }
 }
 
@@ -50,7 +48,6 @@ extension PokemonDetails {
         self.species = ""
         self.types = []
         self.formsCount = 0
-        self.backgroundColor = .clear
     }
 }
 

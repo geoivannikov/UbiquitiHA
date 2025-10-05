@@ -22,33 +22,6 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         self.localDataSource = localDataSource
     }
     
-    // MARK: - Mapping Methods
-    
-    private func mapToEntity(_ model: PokemonModel) -> Pokemon {
-        return Pokemon(
-            id: model.id,
-            name: model.name,
-            number: model.number,
-            types: model.types,
-            imageData: model.imageData,
-            height: model.height,
-            weight: model.weight,
-            baseExperience: model.baseExperience
-        )
-    }
-    
-    private func mapToModel(_ pokemon: Pokemon) -> PokemonModel {
-        return PokemonModel(
-            id: pokemon.id,
-            name: pokemon.name,
-            number: pokemon.number,
-            types: pokemon.types,
-            imageData: pokemon.imageData,
-            height: pokemon.height,
-            weight: pokemon.weight,
-            baseExperience: pokemon.baseExperience
-        )
-    }
     
     // MARK: - Pokemon List Operations
     
@@ -66,7 +39,6 @@ final class PokemonRepository: PokemonRepositoryProtocol {
             
             return try await fetchPokemonsWithCache(pokemonIds: pokemonIds)
         } catch {
-            print("Network error, trying to load from cache: \(error)")
             return try await fetchPokemonsFromCache(offset: offset, limit: limit)
         }
     }
@@ -78,7 +50,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         for id in pokemonIds {
             do {
                 if let cachedModel = try localDataSource.fetchPokemon(by: id) {
-                    cachedPokemons[id] = mapToEntity(cachedModel)
+                    cachedPokemons[id] = Pokemon(from: cachedModel)
                 } else {
                     missingIds.append(id)
                 }
@@ -122,7 +94,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         
         for pokemon in newPokemons {
             do {
-                let model = mapToModel(pokemon)
+                let model = PokemonModel(from: pokemon)
                 try localDataSource.savePokemon(model)
             } catch {
                 print("Failed to cache pokemon \(pokemon.id): \(error)")
@@ -152,7 +124,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         }
         
         let paginatedPokemons = Array(allCachedPokemons[startIndex..<endIndex])
-        return paginatedPokemons.map { mapToEntity($0) }
+        return paginatedPokemons.map(Pokemon.init)
     }
     
     func fetchPokemonDetails(pokemon: Pokemon) async throws -> PokemonDetails {
@@ -185,8 +157,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
                         baseExperience: pokemon.baseExperience,
                         species: "",
                         types: pokemon.types,
-                        formsCount: 0, 
-                        backgroundColor: pokemon.backgroundColor
+                        formsCount: 0
                     )
                 }
             } catch {

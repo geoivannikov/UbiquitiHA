@@ -18,8 +18,6 @@ final class PokemonModel: DatabaseModel {
     var height: Int
     var weight: Int
     var baseExperience: Int
-    var createdAt: Date
-    var updatedAt: Date
     
     init(id: Int, name: String, number: String, types: [String], imageData: Data? = nil,
          height: Int, weight: Int, baseExperience: Int) {
@@ -31,11 +29,22 @@ final class PokemonModel: DatabaseModel {
         self.height = height
         self.weight = weight
         self.baseExperience = baseExperience
-        self.createdAt = Date()
-        self.updatedAt = Date()
     }
-    
-    func updateTimestamp() {
-        self.updatedAt = Date()
+}
+
+// MARK: - Mapping
+
+extension PokemonModel {
+    convenience init(from pokemon: Pokemon) {
+        self.init(
+            id: pokemon.id,
+            name: pokemon.name,
+            number: pokemon.number,
+            types: pokemon.types,
+            imageData: pokemon.imageData,
+            height: pokemon.height,
+            weight: pokemon.weight,
+            baseExperience: pokemon.baseExperience
+        )
     }
 }
