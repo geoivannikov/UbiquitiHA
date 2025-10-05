@@ -2,12 +2,13 @@
 //  PokemonDetails.swift
 //  UbiquitiHA
 //
-//  Created by Ivannikov-EXTERNAL Georgiy on 02.10.2025.
+//  Created by Ivannikov Georgiy on 02.10.2025.
 //
 
 import SwiftUI
 
 struct PokemonDetails {
+    let id: Int
     let name: String
     let description: String
     let weight: Int
@@ -23,6 +24,7 @@ struct PokemonDetails {
 
 extension PokemonDetails {
     init(pokemon: Pokemon, pokemonSpeciesResponse: PokemonSpeciesResponse) {
+        self.id = pokemon.id
         self.name = pokemon.name
         self.description = pokemonSpeciesResponse.flavorText
         self.weight = pokemon.weight
@@ -39,6 +41,7 @@ extension PokemonDetails {
 
 extension PokemonDetails {
     init() {
+        self.id = 0
         self.name = ""
         self.description = ""
         self.weight = 0

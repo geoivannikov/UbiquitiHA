@@ -17,10 +17,11 @@ struct PokemonDetailView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            viewModel.details.backgroundColor.ignoresSafeArea()
+            viewModel.backgroundColor.ignoresSafeArea()
             VStack(spacing: 0) {
                 if viewModel.details.isEmpty {
                     EmptyView()
+                        .background(viewModel.backgroundColor)
                 } else {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 32) {

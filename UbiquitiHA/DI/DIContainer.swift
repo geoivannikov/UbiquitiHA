@@ -39,12 +39,20 @@ final class DIContainer: Resolver {
             PokemonRemoteDataSource(networkService: DIContainer.shared.resolve())
         }
         
+        DIContainer.shared.register(PokemonLocalDataSourceProtocol.self) {
+            PokemonLocalDataSource(databaseService: DIContainer.shared.resolve())
+        }
+        
+        DIContainer.shared.register(PokemonRepositoryProtocol.self) {
+            PokemonRepository(remoteDataSource: DIContainer.shared.resolve(), localDataSource: DIContainer.shared.resolve())
+        }
+        
         DIContainer.shared.register(LoadPokemonsUseCaseProtocol.self) {
-            LoadPokemonsUseCase(remoteDataSource: DIContainer.shared.resolve())
+            LoadPokemonsUseCase(repository: DIContainer.shared.resolve())
         }
         
         DIContainer.shared.register(LoadPokemonDescriptionUseCaseProtocol.self) {
-            LoadPokemonDescriptionUseCase(remoteDataSource: DIContainer.shared.resolve())
+            LoadPokemonDescriptionUseCase(repository: DIContainer.shared.resolve())
         }
     }
 }

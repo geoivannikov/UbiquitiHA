@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class PokemonDetailViewModel: ObservableObject {
     // MARK: - Public State
@@ -13,6 +14,9 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published private(set) var details = PokemonDetails()
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
+    var backgroundColor: Color {
+        pokemon.backgroundColor
+    }
 
     // MARK: - Dependencies
 

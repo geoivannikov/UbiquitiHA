@@ -12,51 +12,13 @@ protocol LoadPokemonsUseCaseProtocol {
 }
 
 final class LoadPokemonsUseCase: LoadPokemonsUseCaseProtocol {
-    private let remoteDataSource: PokemonRemoteDataSourceProtocol
+    private let repository: PokemonRepositoryProtocol
 
-    init(remoteDataSource: PokemonRemoteDataSourceProtocol = DIContainer.shared.resolve()) {
-        self.remoteDataSource = remoteDataSource
+    init(repository: PokemonRepositoryProtocol = DIContainer.shared.resolve()) {
+        self.repository = repository
     }
 
     func execute(offset: Int, limit: Int) async throws -> [Pokemon] {
-        let response = try await remoteDataSource.fetchPokemonsList(offset: offset, limit: limit)
-        let entries = response.results
-
-        let detailResponses: [PokemonDetailResponse] = try await withThrowingTaskGroup(of: PokemonDetailResponse?.self) { group in
-            entries.forEach { entry in
-                group.addTask {
-                    try? await self.remoteDataSource.fetchPokemon(url: entry.url)
-                }
-            }
-
-            return try await group.reduce(into: []) { result, next in
-                if let model = next {
-                    result.append(model)
-                }
-            }
-        }
-
-        // Загружаем изображения параллельно через remoteDataSource
-        let pokemonsWithImages: [Pokemon] = try await withThrowingTaskGroup(of: Pokemon?.self) { group in
-            detailResponses.forEach { detail in
-                group.addTask {
-                    do {
-                        let imageData = try await self.remoteDataSource.fetchImageData(from: detail.sprites.other.officialArtwork.frontDefault)
-                        return Pokemon(detail: detail, imageData: imageData)
-                    } catch {
-                        print("Failed to load image: \(detail.sprites.other.officialArtwork.frontDefault) - \(error.localizedDescription)")
-                        return Pokemon(detail: detail, imageData: nil)
-                    }
-                }
-            }
-
-            return try await group.reduce(into: []) { result, next in
-                if let pokemon = next {
-                    result.append(pokemon)
-                }
-            }
-        }
-
-        return pokemonsWithImages
+        return try await repository.fetchPokemons(offset: offset, limit: limit)
     }
 }
