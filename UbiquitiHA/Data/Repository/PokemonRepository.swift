@@ -39,7 +39,13 @@ final class PokemonRepository: PokemonRepositoryProtocol {
             
             return try await fetchPokemonsWithCache(pokemonIds: pokemonIds)
         } catch {
-            return try await fetchPokemonsFromCache(offset: offset, limit: limit)
+            let pokemons = try fetchPokemonsFromCache(offset: offset, limit: limit)
+            
+            if pokemons.isEmpty && offset == 0 {
+                throw RepositoryError.apiFailedNoCache
+            }
+            
+            return pokemons
         }
     }
     
@@ -92,13 +98,8 @@ final class PokemonRepository: PokemonRepositoryProtocol {
             }
         }
         
-        for pokemon in newPokemons {
-            do {
-                let model = PokemonModel(from: pokemon)
-                try localDataSource.savePokemon(model)
-            } catch {
-                print("Failed to cache pokemon \(pokemon.id): \(error)")
-            }
+        try newPokemons.map { PokemonModel(from: $0) }.forEach {
+            try localDataSource.savePokemon($0)
         }
 
         var result: [Pokemon] = []
@@ -113,7 +114,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         return result
     }
     
-    private func fetchPokemonsFromCache(offset: Int, limit: Int) async throws -> [Pokemon] {
+    private func fetchPokemonsFromCache(offset: Int, limit: Int) throws -> [Pokemon] {
         let allCachedPokemons = try localDataSource.fetchPokemons()
         
         let startIndex = offset
@@ -132,41 +133,31 @@ final class PokemonRepository: PokemonRepositoryProtocol {
             let speciesResponse = try await remoteDataSource.fetchPokemonDescription(name: pokemon.name)
             let pokemonDetails = PokemonDetails(pokemon: pokemon, pokemonSpeciesResponse: speciesResponse)
             
-            do {
-                let detailsModel = PokemonDetailsModel(
-                    pokemonId: pokemon.id,
-                    description: pokemonDetails.description,
-                    abilities: [],
-                    stats: [:]
-                )
-                try localDataSource.savePokemonDetails(detailsModel)
-            } catch {
-                print("Failed to cache pokemon details: \(error)")
-            }
+            let detailsModel = PokemonDetailsModel(
+                pokemonId: pokemon.id,
+                description: pokemonDetails.description,
+                abilities: [],
+                stats: [:]
+            )
+            try localDataSource.savePokemonDetails(detailsModel)
             
             return pokemonDetails
         } catch {
-            do {
-                if let cachedDetails = try localDataSource.fetchPokemonDetails(by: pokemon.id) {
-                    return PokemonDetails(
-                        id: pokemon.id,
-                        name: pokemon.name,
-                        description: cachedDetails.pokemonDescription ?? "",
-                        weight: pokemon.weight,
-                        height: pokemon.height,
-                        baseExperience: pokemon.baseExperience,
-                        species: "",
-                        types: pokemon.types,
-                        formsCount: 0
-                    )
-                }
-            } catch {
-                print("Failed to fetch cached pokemon details: \(error)")
+            guard let cachedDetails = try localDataSource.fetchPokemonDetails(by: pokemon.id) else {
+                throw RepositoryError.apiFailedNoCache
             }
             
-            throw NSError(domain: "PokemonRepository", code: 404, userInfo: [
-                NSLocalizedDescriptionKey: "Pokemon details not found in cache and no internet connection"
-            ])
+            return PokemonDetails(
+                id: pokemon.id,
+                name: pokemon.name,
+                description: cachedDetails.pokemonDescription ?? "",
+                weight: pokemon.weight,
+                height: pokemon.height,
+                baseExperience: pokemon.baseExperience,
+                species: "",
+                types: pokemon.types,
+                formsCount: 0
+            )
         }
     }
 }

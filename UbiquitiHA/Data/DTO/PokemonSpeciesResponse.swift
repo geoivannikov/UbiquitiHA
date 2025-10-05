@@ -43,7 +43,6 @@ struct PokemonSpeciesResponse: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        // Flavor Text
         let flavorEntries = try container.decode([FlavorTextEntry].self, forKey: .flavorTextEntries)
         self.flavorText = flavorEntries
             .first(where: { $0.language.name == "en" })?
@@ -51,13 +50,11 @@ struct PokemonSpeciesResponse: Codable {
             .replacingOccurrences(of: "\n", with: " ")
             .replacingOccurrences(of: "\u{000c}", with: " ") ?? "No description available."
 
-        // Genus
         let genusEntries = try container.decode([GenusEntry].self, forKey: .genera)
         self.genus = genusEntries
             .first(where: { $0.language.name == "en" })?
             .genus ?? "Unknown"
 
-        // Varieties count
         let varieties = try container.decode([Variety].self, forKey: .varieties)
         self.formsCount = varieties.count
     }

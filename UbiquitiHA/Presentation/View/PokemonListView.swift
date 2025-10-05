@@ -49,6 +49,7 @@ struct PokemonListView: View {
         .onLoad {
             await viewModel.loadNextPage()
         }
+        .errorAlert(errorMessage: $viewModel.errorMessage)
     }
 }
 

@@ -21,7 +21,7 @@ final class PokemonListViewModel: ObservableObject {
     // MARK: - Paging
 
     private(set) var offset = 0
-    private let pageSize = 20
+    private let pageSize = 50
 
     // MARK: - Init
 

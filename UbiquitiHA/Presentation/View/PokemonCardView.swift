@@ -37,7 +37,10 @@ struct PokemonCardView: View {
                         .resizable()
                         .scaledToFit()
                 } else {
-                    Image.hiddenDefault
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .hidden()
                 }
             }
         }

@@ -69,13 +69,7 @@ struct PokemonDetailView: View {
             .onLoad {
                 await viewModel.load()
             }
-            .alert("Error", isPresented: .constant(viewModel.errorMessage != nil), actions: {
-                Button("OK", role: .cancel) {
-                    viewModel.errorMessage = nil
-                }
-            }, message: {
-                Text(viewModel.errorMessage ?? "")
-            })
+            .errorAlert(errorMessage: $viewModel.errorMessage)
         }
     }
 }
