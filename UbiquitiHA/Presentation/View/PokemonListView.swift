@@ -50,6 +50,13 @@ struct PokemonListView: View {
             await viewModel.loadNextPage()
         }
         .errorAlert(errorMessage: $viewModel.errorMessage)
+        .overlay(alignment: .bottom) {
+            if viewModel.showNetworkStatus {
+                NetworkStatusBanner(message: viewModel.networkStatusMessage)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.easeInOut(duration: 0.3), value: viewModel.showNetworkStatus)
+            }
+        }
     }
 }
 

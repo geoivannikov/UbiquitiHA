@@ -13,10 +13,14 @@ final class PokemonListViewModel: ObservableObject {
     @Published private(set) var pokemons: [Pokemon] = []
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
+    @Published var isConnected = false
+    @Published var showNetworkStatus = false
+    @Published var networkStatusMessage = ""
 
     // MARK: - Dependencies
 
     private let loadUseCase: LoadPokemonsUseCaseProtocol
+    private let networkMonitor: NetworkMonitorProtocol
 
     // MARK: - Paging
 
@@ -25,8 +29,32 @@ final class PokemonListViewModel: ObservableObject {
 
     // MARK: - Init
 
-    init(loadUseCase: LoadPokemonsUseCaseProtocol = DIContainer.shared.resolve()) {
+    init(loadUseCase: LoadPokemonsUseCaseProtocol = DIContainer.shared.resolve(),
+         networkMonitor: NetworkMonitorProtocol = DIContainer.shared.resolve()) {
         self.loadUseCase = loadUseCase
+        self.networkMonitor = networkMonitor
+        self.isConnected = networkMonitor.isConnected
+        
+        networkMonitor.onConnectionChange { [weak self] isConnected in
+            DispatchQueue.main.async {
+                let wasConnected = self?.isConnected ?? false
+                self?.isConnected = isConnected
+                if wasConnected != isConnected {
+                    self?.showNetworkStatusBanner()
+                }
+            }
+        }
+    }
+
+    // MARK: - Private Methods
+    @MainActor
+    private func showNetworkStatusBanner() {
+        networkStatusMessage = isConnected ? "🌐 Connected" : "📶 No Internet"
+        showNetworkStatus = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.showNetworkStatus = false
+        }
     }
 
     // MARK: - Public Methods
