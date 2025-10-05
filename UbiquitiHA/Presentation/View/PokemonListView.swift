@@ -20,8 +20,13 @@ struct PokemonListView: View {
     var body: some View {
         ZStack {
             if viewModel.isLoading && viewModel.pokemons.isEmpty {
-                ProgressView("Loading Pokemons...")
-                    .padding()
+                VStack {
+                    ProgressView()
+                        .scaleEffect(1.2)
+                    Text("Loading...")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
             }
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
@@ -32,6 +37,12 @@ struct PokemonListView: View {
                         }
                         .id("pokemon-\(pokemon.id)")
                         .frame(minHeight: 120)
+                    }
+                    
+                    if viewModel.isLoading && !viewModel.pokemons.isEmpty {
+                        ForEach(0..<2, id: \.self) { _ in
+                            ProgressView()
+                        }
                     }
                 }
                 .padding()

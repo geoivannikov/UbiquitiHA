@@ -19,7 +19,17 @@ struct PokemonDetailView: View {
         ZStack(alignment: .top) {
             viewModel.backgroundColor.ignoresSafeArea()
             VStack(spacing: 0) {
-                if viewModel.details.isEmpty {
+                if viewModel.isLoading {
+                    VStack {
+                        ProgressView()
+                            .scaleEffect(1.2)
+                        Text("Loading...")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(viewModel.backgroundColor)
+                } else if viewModel.details.isEmpty {
                     EmptyView()
                         .background(viewModel.backgroundColor)
                 } else {
