@@ -2,7 +2,7 @@
 //  NetworkStatusBanner.swift
 //  UbiquitiHA
 //
-//  Created by Ivannikov-EXTERNAL Georgiy on 05.10.2025.
+//  Created by Ivannikov Georgiy on 05.10.2025.
 //
 
 import SwiftUI

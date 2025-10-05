@@ -2,7 +2,7 @@
 //  UbiquitiHAUITests.swift
 //  UbiquitiHAUITests
 //
-//  Created by Ivannikov-EXTERNAL Georgiy on 02.10.2025.
+//  Created by Ivannikov Georgiy on 02.10.2025.
 //
 
 import XCTest

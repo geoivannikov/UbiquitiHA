@@ -24,8 +24,8 @@ final class PokemonListViewModel: ObservableObject {
 
     // MARK: - Paging
 
-    private(set) var offset = 0
-    private let pageSize = 30
+    private(set) var offset = Constants.initialOffset
+    private let pageSize = Constants.defaultPageSize
     private var networkCallbackId: UUID?
 
     // MARK: - Init
@@ -63,7 +63,7 @@ final class PokemonListViewModel: ObservableObject {
         networkStatusMessage = isConnected ? "🌐 Connected" : "📶 No Internet"
         showNetworkStatus = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + PaginationConstants.networkBannerDisplayDuration) { [weak self] in
             self?.showNetworkStatus = false
         }
     }
@@ -71,7 +71,7 @@ final class PokemonListViewModel: ObservableObject {
     // MARK: - Public Methods
 
     func loadNextPage() async {
-        if offset == 0, !networkMonitor.isConnected {
+        if offset == PaginationConstants.initialOffset, !networkMonitor.isConnected {
             await MainActor.run { errorMessage = PokemonError.noConnection.errorDescription }
         }
         

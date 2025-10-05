@@ -32,7 +32,7 @@ struct PokemonListView: View {
                     }
                     
                     if viewModel.isLoading && !viewModel.pokemons.isEmpty {
-                        ForEach(0..<2, id: \.self) { _ in
+                        ForEach(0..<Constants.loadingSkeletonCount, id: \.self) { _ in
                             ProgressView()
                                 .frame(minHeight: 120)
                         }

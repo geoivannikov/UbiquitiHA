@@ -2,7 +2,7 @@
 //  Pokemon.swift
 //  UbiquitiHA
 //
-//  Created by Ivannikov on 02.10.2025.
+//  Created by Ivannikov Georgiy on 02.10.2025.
 //
 
 import SwiftUI
