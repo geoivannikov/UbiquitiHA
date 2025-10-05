@@ -95,9 +95,10 @@ final class PokemonListRepository: PokemonListRepositoryProtocol {
     
     private func fetchPokemonDetails(ids: [Int]) async throws -> [PokemonDetailResponse] {
         try await withThrowingTaskGroup(of: PokemonDetailResponse?.self) { group in
+            let remoteDataSource = self.remoteDataSource
             ids.forEach { id in
                 group.addTask {
-                    try? await self.remoteDataSource.fetchPokemon(id: id)
+                    try? await remoteDataSource.fetchPokemon(id: id)
                 }
             }
             
@@ -111,10 +112,11 @@ final class PokemonListRepository: PokemonListRepositoryProtocol {
     
     private func createPokemonsFromDetails(_ details: [PokemonDetailResponse]) async throws -> [Pokemon] {
         try await withThrowingTaskGroup(of: Pokemon?.self) { group in
+            let remoteDataSource = self.remoteDataSource
             details.forEach { detail in
                 group.addTask {
                     do {
-                        let imageData = try await self.remoteDataSource.fetchPokemonImage(from: detail)
+                        let imageData = try await remoteDataSource.fetchPokemonImage(from: detail)
                         return Pokemon(detail: detail, imageData: imageData)
                     } catch {
                         return Pokemon(detail: detail, imageData: nil)

@@ -26,13 +26,14 @@ final class PokemonListViewModel: ObservableObject {
 
     private(set) var offset = 0
     private let pageSize = 30
+    private var networkCallbackId: UUID?
 
     // MARK: - Init
 
     init() {
         self.isConnected = networkMonitor.isConnected
         
-        networkMonitor.onConnectionChange { [weak self] isConnected in
+        networkCallbackId = networkMonitor.onConnectionChange { [weak self] isConnected in
             guard let self = self else {
                 return
             }
@@ -49,6 +50,12 @@ final class PokemonListViewModel: ObservableObject {
             }
         }
     }
+    
+    deinit {
+        if let callbackId = networkCallbackId {
+            networkMonitor.removeCallback(callbackId)
+        }
+    }
 
     // MARK: - Private Methods
     @MainActor
@@ -56,8 +63,8 @@ final class PokemonListViewModel: ObservableObject {
         networkStatusMessage = isConnected ? "🌐 Connected" : "📶 No Internet"
         showNetworkStatus = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.showNetworkStatus = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.showNetworkStatus = false
         }
     }
 

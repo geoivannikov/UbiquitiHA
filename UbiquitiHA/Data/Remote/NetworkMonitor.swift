@@ -10,7 +10,8 @@ import Network
 
 protocol NetworkMonitorProtocol {
     var isConnected: Bool { get }
-    func onConnectionChange(_ callback: @escaping (Bool) -> Void)
+    func onConnectionChange(_ callback: @escaping (Bool) -> Void) -> UUID
+    func removeCallback(_ id: UUID)
 }
 
 final class NetworkMonitor: NetworkMonitorProtocol, ObservableObject {
@@ -19,10 +20,14 @@ final class NetworkMonitor: NetworkMonitorProtocol, ObservableObject {
     var isConnected = false
     
     private let monitor = NWPathMonitor()
-    private var callbacks: [(Bool) -> Void] = []
+    private var callbacks: [UUID: (Bool) -> Void] = [:]
     
     init() {
         startMonitoring()
+    }
+    
+    deinit {
+        monitor.cancel()
     }
     
     private func startMonitoring() {
@@ -30,14 +35,20 @@ final class NetworkMonitor: NetworkMonitorProtocol, ObservableObject {
             let isConnected = path.status == .satisfied
             self?.isConnected = isConnected
             
-            self?.callbacks.forEach { callback in
+            self?.callbacks.values.forEach { callback in
                 callback(isConnected)
             }
         }
         monitor.start(queue: DispatchQueue.global())
     }
     
-    func onConnectionChange(_ callback: @escaping (Bool) -> Void) {
-        callbacks.append(callback)
+    func onConnectionChange(_ callback: @escaping (Bool) -> Void) -> UUID {
+        let id = UUID()
+        callbacks[id] = callback
+        return id
+    }
+    
+    func removeCallback(_ id: UUID) {
+        callbacks.removeValue(forKey: id)
     }
 }
