@@ -42,6 +42,17 @@ extension Pokemon {
         self.weight = model.weight
         self.baseExperience = model.baseExperience
     }
+    
+    init(id: Int) {
+        self.id = id
+        self.name = ""
+        self.number = ""
+        self.types = []
+        self.imageData = nil
+        self.height = 0
+        self.weight = 0
+        self.baseExperience = 0
+    }
 }
 
 // MARK: - UI Helpers

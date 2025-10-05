@@ -36,12 +36,19 @@ final class PokemonListViewModel: ObservableObject {
         self.isConnected = networkMonitor.isConnected
         
         networkMonitor.onConnectionChange { [weak self] isConnected in
-            DispatchQueue.main.async {
-                let wasConnected = self?.isConnected ?? false
-                self?.isConnected = isConnected
+            guard let self = self else {
+                return
+            }
+            Task { @MainActor in
+                let wasConnected = self.isConnected
+                self.isConnected = isConnected
                 if wasConnected != isConnected {
-                    self?.showNetworkStatusBanner()
+                    self.showNetworkStatusBanner()
                 }
+            }
+            
+            if isConnected, self.pokemons.isEmpty {
+                Task { await self.loadNextPage() }
             }
         }
     }
@@ -60,6 +67,10 @@ final class PokemonListViewModel: ObservableObject {
     // MARK: - Public Methods
 
     func loadNextPage() async {
+        if offset == 0, !networkMonitor.isConnected {
+            await MainActor.run { errorMessage = PokemonError.noConnection.errorDescription }
+        }
+        
         guard await MainActor.run(body: { !isLoading }) else { return }
 
         await MainActor.run { isLoading = true }

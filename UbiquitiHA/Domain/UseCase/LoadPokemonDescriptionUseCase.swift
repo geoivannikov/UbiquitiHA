@@ -10,9 +10,9 @@ protocol LoadPokemonDescriptionUseCaseProtocol {
 }
 
 final class LoadPokemonDescriptionUseCase: LoadPokemonDescriptionUseCaseProtocol {
-    private let repository: PokemonRepositoryProtocol
+    private let repository: PokemonDetailsRepository
 
-    init(repository: PokemonRepositoryProtocol) {
+    init(repository: PokemonDetailsRepository) {
         self.repository = repository
     }
 
