@@ -23,7 +23,7 @@ final class NetworkService: NetworkServiceProtocol {
     
     func fetch<T: Decodable>(urlString: String, as type: T.Type) async throws -> T {
         guard let url = URL(string: urlString) else {
-            throw APIError.invalidURL(urlString)
+            throw PokemonError.unknown
         }
         return try await fetch(url: url, as: type)
     }
@@ -33,19 +33,19 @@ final class NetworkService: NetworkServiceProtocol {
         
         guard let httpResponse = response as? HTTPURLResponse,
               (200..<300).contains(httpResponse.statusCode) else {
-            throw APIError.invalidResponse(nil)
+            throw PokemonError.serverError((response as? HTTPURLResponse)?.statusCode ?? 0)
         }
         
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            throw APIError.decodingFailed(error)
+            throw PokemonError.decodingError(error as! DecodingError)
         }
     }
     
     func fetchData(from urlString: String) async throws -> Data {
         guard let url = URL(string: urlString) else {
-            throw APIError.invalidURL(urlString)
+            throw PokemonError.unknown
         }
         return try await fetchData(from: url)
     }
@@ -55,7 +55,7 @@ final class NetworkService: NetworkServiceProtocol {
         
         guard let httpResponse = response as? HTTPURLResponse,
               (200..<300).contains(httpResponse.statusCode) else {
-            throw APIError.invalidResponse(nil)
+            throw PokemonError.serverError((response as? HTTPURLResponse)?.statusCode ?? 0)
         }
         
         return data

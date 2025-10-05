@@ -12,4 +12,5 @@ enum Constants {
     static let initialOffset = 0
     static let loadingSkeletonCount = 2
     static let networkBannerDisplayDuration: TimeInterval = 2.0
+    static let pokeApiBaseURL = "https://pokeapi.co/api/v2"
 }

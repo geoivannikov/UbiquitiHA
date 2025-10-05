@@ -16,24 +16,23 @@ protocol PokemonRemoteDataSourceProtocol {
 
 final class PokemonRemoteDataSource: PokemonRemoteDataSourceProtocol {
     private let networkService: NetworkServiceProtocol
-    private let baseURL = "https://pokeapi.co/api/v2"
 
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
     }
 
     func fetchPokemonsList(offset: Int, limit: Int) async throws -> PokemonListResponse {
-        let url = "\(baseURL)/pokemon?limit=\(limit)&offset=\(offset)"
+        let url = "\(Constants.pokeApiBaseURL)/pokemon?limit=\(limit)&offset=\(offset)"
         return try await networkService.fetch(urlString: url, as: PokemonListResponse.self)
     }
 
     func fetchPokemon(id: Int) async throws -> PokemonDetailResponse {
-        let url = "https://pokeapi.co/api/v2/pokemon/\(id)"
+        let url = "\(Constants.pokeApiBaseURL)/pokemon/\(id)"
         return try await networkService.fetch(urlString: url, as: PokemonDetailResponse.self)
     }
 
     func fetchPokemonDescription(name: String) async throws -> PokemonSpeciesResponse {
-        let endpoint = "\(baseURL)/pokemon-species/\(name)"
+        let endpoint = "\(Constants.pokeApiBaseURL)/pokemon-species/\(name)"
         return try await networkService.fetch(urlString: endpoint, as: PokemonSpeciesResponse.self)
     }
     
