@@ -17,15 +17,13 @@ final class PokemonDetailViewModel: ObservableObject {
 
     // MARK: - Dependencies
 
+    @Inject private var loadUseCase: LoadPokemonDescriptionUseCaseProtocol
     var backgroundColor: Color { pokemon.backgroundColor }
-    private let loadUseCase: LoadPokemonDescriptionUseCaseProtocol
     private let pokemon: Pokemon
 
     // MARK: - Init
 
-    init(loadUseCase: LoadPokemonDescriptionUseCaseProtocol = DIContainer.shared.resolve(),
-         pokemon: Pokemon) {
-        self.loadUseCase = loadUseCase
+    init(pokemon: Pokemon) {
         self.pokemon = pokemon
     }
 

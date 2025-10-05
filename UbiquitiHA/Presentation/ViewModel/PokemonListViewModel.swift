@@ -19,8 +19,8 @@ final class PokemonListViewModel: ObservableObject {
 
     // MARK: - Dependencies
 
-    private let loadUseCase: LoadPokemonsUseCaseProtocol
-    private let networkMonitor: NetworkMonitorProtocol
+    @Inject private var loadUseCase: LoadPokemonsUseCaseProtocol
+    @Inject private var networkMonitor: NetworkMonitorProtocol
 
     // MARK: - Paging
 
@@ -29,10 +29,7 @@ final class PokemonListViewModel: ObservableObject {
 
     // MARK: - Init
 
-    init(loadUseCase: LoadPokemonsUseCaseProtocol = DIContainer.shared.resolve(),
-         networkMonitor: NetworkMonitorProtocol = DIContainer.shared.resolve()) {
-        self.loadUseCase = loadUseCase
-        self.networkMonitor = networkMonitor
+    init() {
         self.isConnected = networkMonitor.isConnected
         
         networkMonitor.onConnectionChange { [weak self] isConnected in

@@ -37,45 +37,45 @@ struct UbiquitiHAApp: App {
     }
     
     private func setupDependencies() {
-        DIContainer.shared.register(NetworkMonitorProtocol.self) {
+        DIContainer.shared.register(NetworkMonitorProtocol.self, lifecycle: .singleton) {
             NetworkMonitor.shared
         }
         
-        DIContainer.shared.register(NetworkServiceProtocol.self) {
+        DIContainer.shared.register(DatabaseServiceProtocol.self, lifecycle: .singleton) {
+            DatabaseService(container: sharedModelContainer)
+        }
+
+        DIContainer.shared.register(NetworkServiceProtocol.self, lifecycle: .transient) {
             NetworkService()
         }
         
-        DIContainer.shared.register(PokemonRemoteDataSourceProtocol.self) {
+        DIContainer.shared.register(PokemonRemoteDataSourceProtocol.self, lifecycle: .transient) {
             PokemonRemoteDataSource(networkService: DIContainer.shared.resolve())
         }
         
-        DIContainer.shared.register(PokemonCacheServiceProtocol.self) {
+        DIContainer.shared.register(PokemonCacheServiceProtocol.self, lifecycle: .transient) {
             PokemonCacheService(databaseService: DIContainer.shared.resolve())
         }
         
-        DIContainer.shared.register(PokemonListRepositoryProtocol.self) {
+        DIContainer.shared.register(PokemonListRepositoryProtocol.self, lifecycle: .transient) {
             PokemonListRepository(remoteDataSource: DIContainer.shared.resolve(),
                                   cacheService: DIContainer.shared.resolve(),
                                   networkMonitor: DIContainer.shared.resolve()
             )
         }
         
-        DIContainer.shared.register(PokemonDetailsRepository.self) {
+        DIContainer.shared.register(PokemonDetailsRepository.self, lifecycle: .transient) {
             PokemonDetailsRepository(remoteDataSource: DIContainer.shared.resolve(),
                                      cacheService: DIContainer.shared.resolve(),
                                      networkMonitor: DIContainer.shared.resolve())
         }
         
-        DIContainer.shared.register(LoadPokemonsUseCaseProtocol.self) {
+        DIContainer.shared.register(LoadPokemonsUseCaseProtocol.self, lifecycle: .transient) {
             LoadPokemonsUseCase(repository: DIContainer.shared.resolve())
         }
         
-        DIContainer.shared.register(LoadPokemonDescriptionUseCaseProtocol.self) {
+        DIContainer.shared.register(LoadPokemonDescriptionUseCaseProtocol.self, lifecycle: .transient) {
             LoadPokemonDescriptionUseCase(repository: DIContainer.shared.resolve())
-        }
-        
-        DIContainer.shared.register(DatabaseServiceProtocol.self) {
-            DatabaseService(container: sharedModelContainer)
         }
     }
 }
