@@ -21,8 +21,10 @@ struct PokemonDetailView: View {
             VStack(spacing: 0) {
                 if viewModel.isLoading {
                     ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(viewModel.backgroundColor)
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(2)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(viewModel.backgroundColor)
                 } else if viewModel.details.isEmpty {
                     EmptyView()
                         .background(viewModel.backgroundColor)

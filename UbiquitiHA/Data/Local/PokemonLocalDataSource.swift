@@ -30,7 +30,7 @@ final class PokemonLocalDataSource: PokemonLocalDataSourceProtocol {
     }
     
     func fetchPokemons() throws -> [PokemonModel] {
-        try databaseService.fetch(of: PokemonModel.self, sortDescriptors: [])
+        try databaseService.fetch(of: PokemonModel.self, sortDescriptors: []).sorted { $0.id < $1.id }
     }
     
     func fetchPokemon(by id: Int) throws -> PokemonModel? {

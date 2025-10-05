@@ -27,7 +27,9 @@ struct UbiquitiHAApp: App {
     var body: some Scene {
         WindowGroup {
             let coordinator = Coordinator()
-            RootView().environmentObject(coordinator)
+            RootView()
+                .environmentObject(coordinator)
+                .modelContainer(sharedModelContainer)
         }
     }
     

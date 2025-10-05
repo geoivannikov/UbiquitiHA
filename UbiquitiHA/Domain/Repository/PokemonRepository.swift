@@ -28,23 +28,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
     // MARK: - Pokemon List Operations
     
     func fetchPokemons(offset: Int, limit: Int) async throws -> [Pokemon] {
-        if networkMonitor.isConnected {
-            do {
-                let response = try await remoteDataSource.fetchPokemonsList(offset: offset, limit: limit)
-                let entries = response.results
-
-                let pokemonIds = entries.compactMap { entry -> Int? in
-                    guard let url = URL(string: entry.url),
-                          let lastPathComponent = url.pathComponents.last,
-                          let id = Int(lastPathComponent) else { return nil }
-                    return id
-                }
-                
-                return try await fetchPokemonsWithCache(pokemonIds: pokemonIds)
-            } catch {
-                return try fetchPokemonsFromCache(offset: offset, limit: limit)
-            }
-        } else {
+        guard networkMonitor.isConnected else {
             let pokemons = try fetchPokemonsFromCache(offset: offset, limit: limit)
             
             if pokemons.isEmpty && offset == 0 {
@@ -52,6 +36,22 @@ final class PokemonRepository: PokemonRepositoryProtocol {
             }
             
             return pokemons
+        }
+        
+        do {
+            let response = try await remoteDataSource.fetchPokemonsList(offset: offset, limit: limit)
+            let entries = response.results
+
+            let pokemonIds = entries.compactMap { entry -> Int? in
+                guard let url = URL(string: entry.url),
+                      let lastPathComponent = url.pathComponents.last,
+                      let id = Int(lastPathComponent) else { return nil }
+                return id
+            }
+            
+            return try await fetchPokemonsWithCache(pokemonIds: pokemonIds)
+        } catch {
+            return try fetchPokemonsFromCache(offset: offset, limit: limit)
         }
     }
     
@@ -122,13 +122,8 @@ final class PokemonRepository: PokemonRepositoryProtocol {
     
     private func fetchPokemonsFromCache(offset: Int, limit: Int) throws -> [Pokemon] {
         let allCachedPokemons = try localDataSource.fetchPokemons()
-        
         let startIndex = offset
         let endIndex = min(offset + limit, allCachedPokemons.count)
-        
-        guard startIndex < allCachedPokemons.count else {
-            return []
-        }
         
         let paginatedPokemons = Array(allCachedPokemons[startIndex..<endIndex])
         return paginatedPokemons.map(Pokemon.init)
@@ -137,26 +132,26 @@ final class PokemonRepository: PokemonRepositoryProtocol {
     // MARK: - Pokemon Details Operations
     
     func fetchPokemonDetails(pokemon: Pokemon) async throws -> PokemonDetails {
-        if networkMonitor.isConnected {
-            do {
-                let speciesResponse = try await remoteDataSource.fetchPokemonDescription(name: pokemon.name)
-                let pokemonDetails = PokemonDetails(pokemon: pokemon, pokemonSpeciesResponse: speciesResponse)
-                
-                let detailsModel = PokemonDescriptionModel(
-                    pokemonId: pokemon.id,
-                    description: pokemonDetails.description
-                )
-                try localDataSource.savePokemonDetails(detailsModel)
-                
-                return pokemonDetails
-            } catch {
-                guard let cachedDetails = try localDataSource.fetchPokemonDetails(by: pokemon.id) else {
-                    throw RepositoryError.apiFailedNoCache
-                }
-                
-                return PokemonDetails(pokemon: pokemon, model: cachedDetails)
+        guard networkMonitor.isConnected else {
+            guard let cachedDetails = try localDataSource.fetchPokemonDetails(by: pokemon.id) else {
+                throw RepositoryError.apiFailedNoCache
             }
-        } else {
+            
+            return PokemonDetails(pokemon: pokemon, model: cachedDetails)
+        }
+        
+        do {
+            let speciesResponse = try await remoteDataSource.fetchPokemonDescription(name: pokemon.name)
+            let pokemonDetails = PokemonDetails(pokemon: pokemon, pokemonSpeciesResponse: speciesResponse)
+            
+            let detailsModel = PokemonDescriptionModel(
+                pokemonId: pokemon.id,
+                description: pokemonDetails.description
+            )
+            try localDataSource.savePokemonDetails(detailsModel)
+            
+            return pokemonDetails
+        } catch {
             guard let cachedDetails = try localDataSource.fetchPokemonDetails(by: pokemon.id) else {
                 throw RepositoryError.apiFailedNoCache
             }

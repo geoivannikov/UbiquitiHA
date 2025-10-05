@@ -21,6 +21,8 @@ struct PokemonListView: View {
         ZStack {
             if viewModel.isLoading && viewModel.pokemons.isEmpty {
                 ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                    .scaleEffect(2)
             }
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
