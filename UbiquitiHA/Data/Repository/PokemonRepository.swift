@@ -9,7 +9,6 @@ import Foundation
 
 protocol PokemonRepositoryProtocol {
     func fetchPokemons(offset: Int, limit: Int) async throws -> [Pokemon]
-    func fetchPokemonDetails(id: Int) async throws -> Pokemon
     func fetchPokemonDetails(pokemon: Pokemon) async throws -> PokemonDetails
 }
 
@@ -156,78 +155,47 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         return paginatedPokemons.map { mapToEntity($0) }
     }
     
-    func fetchPokemonDetails(id: Int) async throws -> Pokemon {
-        do {
-            if let cachedPokemon = try localDataSource.fetchPokemon(by: id) {
-                return mapToEntity(cachedPokemon)
-            }
-        } catch {
-            print("Failed to fetch cached pokemon: \(error)")
-        }
-        
-        do {
-            let pokemonDetail = try await remoteDataSource.fetchPokemon(url: "https://pokeapi.co/api/v2/pokemon/\(id)")
-            
-            let imageData: Data?
-            do {
-                imageData = try await remoteDataSource.fetchImageData(from: pokemonDetail.sprites.other.officialArtwork.frontDefault)
-            } catch {
-                print("Failed to load image: \(pokemonDetail.sprites.other.officialArtwork.frontDefault) - \(error.localizedDescription)")
-                imageData = nil
-            }
-            
-            let pokemon = Pokemon(detail: pokemonDetail, imageData: imageData)
-            
-            do {
-                let model = mapToModel(pokemon)
-                try localDataSource.savePokemon(model)
-            } catch {
-                print("Failed to cache pokemon: \(error)")
-            }
-            
-            return pokemon
-        } catch {
-            throw NSError(domain: "PokemonRepository", code: 404, userInfo: [
-                NSLocalizedDescriptionKey: "Pokemon not found in cache and no internet connection"
-            ])
-        }
-    }
-    
     func fetchPokemonDetails(pokemon: Pokemon) async throws -> PokemonDetails {
         do {
-            if let cachedDetails = try localDataSource.fetchPokemonDetails(by: pokemon.id) {
-                return PokemonDetails(
-                    id: pokemon.id,
-                    name: pokemon.name,
-                    description: cachedDetails.pokemonDescription ?? "",
-                    weight: pokemon.weight,
-                    height: pokemon.height,
-                    baseExperience: pokemon.baseExperience,
-                    species: "",
-                    types: pokemon.types,
-                    formsCount: 0, 
-                    backgroundColor: pokemon.backgroundColor
+            let speciesResponse = try await remoteDataSource.fetchPokemonDescription(name: pokemon.name)
+            let pokemonDetails = PokemonDetails(pokemon: pokemon, pokemonSpeciesResponse: speciesResponse)
+            
+            do {
+                let detailsModel = PokemonDetailsModel(
+                    pokemonId: pokemon.id,
+                    description: pokemonDetails.description,
+                    abilities: [],
+                    stats: [:]
                 )
+                try localDataSource.savePokemonDetails(detailsModel)
+            } catch {
+                print("Failed to cache pokemon details: \(error)")
             }
+            
+            return pokemonDetails
         } catch {
-            print("Failed to fetch cached pokemon details: \(error)")
+            do {
+                if let cachedDetails = try localDataSource.fetchPokemonDetails(by: pokemon.id) {
+                    return PokemonDetails(
+                        id: pokemon.id,
+                        name: pokemon.name,
+                        description: cachedDetails.pokemonDescription ?? "",
+                        weight: pokemon.weight,
+                        height: pokemon.height,
+                        baseExperience: pokemon.baseExperience,
+                        species: "",
+                        types: pokemon.types,
+                        formsCount: 0, 
+                        backgroundColor: pokemon.backgroundColor
+                    )
+                }
+            } catch {
+                print("Failed to fetch cached pokemon details: \(error)")
+            }
+            
+            throw NSError(domain: "PokemonRepository", code: 404, userInfo: [
+                NSLocalizedDescriptionKey: "Pokemon details not found in cache and no internet connection"
+            ])
         }
-        
-        let speciesResponse = try await remoteDataSource.fetchPokemonDescription(name: pokemon.name)
-        let pokemonDetails = PokemonDetails(pokemon: pokemon, pokemonSpeciesResponse: speciesResponse)
-        
-        do {
-            let detailsModel = PokemonDetailsModel(
-                pokemonId: pokemon.id,
-                description: pokemonDetails.description,
-                abilities: [], // Нужно будет добавить в PokemonDetails
-                stats: [:] // Нужно будет добавить в PokemonDetails
-            )
-            try localDataSource.savePokemonDetails(detailsModel)
-        } catch {
-            print("Failed to cache pokemon details: \(error)")
-        }
-        
-        return pokemonDetails
     }
 }
