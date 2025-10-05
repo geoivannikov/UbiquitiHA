@@ -27,7 +27,7 @@ final class PokemonListRepository: PokemonListRepositoryProtocol {
     
     func fetchPokemons(offset: Int, limit: Int) async throws -> [Pokemon] {
         guard networkMonitor.isConnected else {
-            return try fetchPokemonsFromCache(offset: offset, limit: limit)
+            return try await fetchPokemonsFromCache(offset: offset, limit: limit)
         }
         
         do {
@@ -35,14 +35,14 @@ final class PokemonListRepository: PokemonListRepositoryProtocol {
             let pokemonIds = extractPokemonIds(from: response.results)
             return try await fetchPokemonsWithCache(pokemonIds: pokemonIds)
         } catch {
-            return try fetchPokemonsFromCache(offset: offset, limit: limit)
+            return try await fetchPokemonsFromCache(offset: offset, limit: limit)
         }
     }
     
     // MARK: - Private Methods
     
-    private func fetchPokemonsFromCache(offset: Int, limit: Int) throws -> [Pokemon] {
-        let pokemons = try cacheService.fetchPokemonsFromCache(offset: offset, limit: limit)
+    private func fetchPokemonsFromCache(offset: Int, limit: Int) async throws -> [Pokemon] {
+        let pokemons = try await cacheService.fetchPokemonsFromCache(offset: offset, limit: limit)
         
         if pokemons.isEmpty && offset == 0 {
             throw PokemonError.noCache
@@ -75,7 +75,7 @@ final class PokemonListRepository: PokemonListRepositoryProtocol {
         
         for id in ids {
             do {
-                if let cachedModel = try cacheService.fetchPokemon(by: id) {
+                if let cachedModel = try await cacheService.fetchPokemon(by: id) {
                     cachedPokemons[id] = Pokemon(from: cachedModel)
                 } else {
                     missingIds.append(id)
@@ -132,7 +132,7 @@ final class PokemonListRepository: PokemonListRepositoryProtocol {
     
     private func saveNewPokemonsToCache(_ pokemons: [Pokemon]) async throws {
         for pokemon in pokemons {
-            try cacheService.savePokemon(pokemon)
+            try await cacheService.savePokemon(pokemon)
         }
     }
     

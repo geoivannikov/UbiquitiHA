@@ -26,20 +26,20 @@ final class PokemonDetailsRepository: PokemonDetailsRepositoryProtocol {
     
     func fetchPokemonDetails(pokemon: Pokemon) async throws -> PokemonDetails {
         guard networkMonitor.isConnected else {
-            return try fetchPokemonDetailsFromCache(pokemon: pokemon)
+            return try await fetchPokemonDetailsFromCache(pokemon: pokemon)
         }
         
         do {
             return try await fetchPokemonDetailsFromAPI(pokemon: pokemon)
         } catch {
-            return try fetchPokemonDetailsFromCache(pokemon: pokemon)
+            return try await fetchPokemonDetailsFromCache(pokemon: pokemon)
         }
     }
     
     // MARK: - Private Methods
     
-    private func fetchPokemonDetailsFromCache(pokemon: Pokemon) throws -> PokemonDetails {
-        guard let cachedDetails = try cacheService.fetchPokemonDetailsFromCache(pokemonId: pokemon.id) else {
+    private func fetchPokemonDetailsFromCache(pokemon: Pokemon) async throws -> PokemonDetails {
+        guard let cachedDetails = try await cacheService.fetchPokemonDetailsFromCache(pokemonId: pokemon.id) else {
             throw PokemonError.noCache
         }
         return cachedDetails
@@ -53,7 +53,7 @@ final class PokemonDetailsRepository: PokemonDetailsRepositoryProtocol {
             pokemonId: pokemon.id,
             description: pokemonDetails.description
         )
-        try cacheService.savePokemonDetails(detailsModel)
+        try await cacheService.savePokemonDetails(detailsModel)
         
         return pokemonDetails
     }

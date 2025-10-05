@@ -8,11 +8,11 @@
 import Foundation
 
 protocol PokemonCacheServiceProtocol {
-    func fetchPokemonsFromCache(offset: Int, limit: Int) throws -> [Pokemon]
-    func fetchPokemonDetailsFromCache(pokemonId: Int) throws -> PokemonDetails?
-    func fetchPokemon(by id: Int) throws -> PokemonModel?
-    func savePokemon(_ pokemon: Pokemon) throws
-    func savePokemonDetails(_ details: PokemonDescriptionModel) throws
+    func fetchPokemonsFromCache(offset: Int, limit: Int) async throws -> [Pokemon]
+    func fetchPokemonDetailsFromCache(pokemonId: Int) async throws -> PokemonDetails?
+    func fetchPokemon(by id: Int) async throws -> PokemonModel?
+    func savePokemon(_ pokemon: Pokemon) async throws
+    func savePokemonDetails(_ details: PokemonDescriptionModel) async throws
 }
 
 final class PokemonCacheService: PokemonCacheServiceProtocol {
@@ -22,8 +22,8 @@ final class PokemonCacheService: PokemonCacheServiceProtocol {
         self.databaseService = databaseService
     }
     
-    func fetchPokemonsFromCache(offset: Int, limit: Int) throws -> [Pokemon] {
-        let allCachedPokemons = try databaseService.fetch(of: PokemonModel.self, sortDescriptors: []).sorted { $0.id < $1.id }
+    func fetchPokemonsFromCache(offset: Int, limit: Int) async throws -> [Pokemon] {
+        let allCachedPokemons = try await databaseService.fetch(of: PokemonModel.self, sortDescriptors: []).sorted { $0.id < $1.id }
         let startIndex = offset
         let endIndex = min(offset + limit, allCachedPokemons.count)
         
@@ -35,8 +35,8 @@ final class PokemonCacheService: PokemonCacheServiceProtocol {
         return paginatedPokemons.map(Pokemon.init)
     }
     
-    func fetchPokemonDetailsFromCache(pokemonId: Int) throws -> PokemonDetails? {
-        let details = try databaseService.fetch(of: PokemonDescriptionModel.self, sortDescriptors: [])
+    func fetchPokemonDetailsFromCache(pokemonId: Int) async throws -> PokemonDetails? {
+        let details = try await databaseService.fetch(of: PokemonDescriptionModel.self, sortDescriptors: [])
         guard let cachedDetails = details.lazy.first(where: { $0.pokemonId == pokemonId }) else {
             return nil
         }
@@ -45,17 +45,17 @@ final class PokemonCacheService: PokemonCacheServiceProtocol {
         return PokemonDetails(pokemon: pokemon, model: cachedDetails)
     }
     
-    func fetchPokemon(by id: Int) throws -> PokemonModel? {
-        let pokemons = try databaseService.fetch(of: PokemonModel.self, sortDescriptors: []).sorted { $0.id < $1.id }
+    func fetchPokemon(by id: Int) async throws -> PokemonModel? {
+        let pokemons = try await databaseService.fetch(of: PokemonModel.self, sortDescriptors: []).sorted { $0.id < $1.id }
         return pokemons.lazy.first { $0.id == id }
     }
     
-    func savePokemon(_ pokemon: Pokemon) throws {
+    func savePokemon(_ pokemon: Pokemon) async throws {
         let model = PokemonModel(from: pokemon)
-        try databaseService.create(model)
+        try await databaseService.create(model)
     }
     
-    func savePokemonDetails(_ details: PokemonDescriptionModel) throws {
-        try databaseService.create(details)
+    func savePokemonDetails(_ details: PokemonDescriptionModel) async throws {
+        try await databaseService.create(details)
     }
 }

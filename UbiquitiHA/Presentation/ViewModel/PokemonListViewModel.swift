@@ -25,7 +25,7 @@ final class PokemonListViewModel: ObservableObject {
     // MARK: - Paging
 
     private(set) var offset = 0
-    private let pageSize = 50
+    private let pageSize = 30
 
     // MARK: - Init
 
@@ -83,9 +83,11 @@ final class PokemonListViewModel: ObservableObject {
 
         do {
             let newPokemons = try await loadUseCase.execute(offset: offset, limit: pageSize)
+            let existingIds = Set(pokemons.map { $0.id })
+            let uniqueNewPokemons = newPokemons.filter { !existingIds.contains($0.id) }
 
             await MainActor.run {
-                pokemons.append(contentsOf: newPokemons)
+                pokemons.append(contentsOf: uniqueNewPokemons)
                 offset += pageSize
             }
         } catch {

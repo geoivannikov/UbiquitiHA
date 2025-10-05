@@ -27,19 +27,19 @@ struct PokemonListView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(viewModel.pokemons) { pokemon in
-                        let isLast = (pokemon.id == viewModel.pokemons.last?.id)
-                        PokemonListItem(pokemon: pokemon, isLast: isLast) {
-                            Task { await viewModel.loadNextPage() }
-                        }
-                        .id("pokemon-\(pokemon.id)")
-                        .frame(minHeight: 120)
+                        PokemonListItem(pokemon: pokemon)
+                            .frame(minHeight: 120)
                     }
                     
                     if viewModel.isLoading && !viewModel.pokemons.isEmpty {
                         ForEach(0..<2, id: \.self) { _ in
                             ProgressView()
+                                .frame(minHeight: 120)
                         }
                     }
+                    Color.clear
+                        .frame(height: 1)
+                        .onAppear { Task { await viewModel.loadNextPage() } }
                 }
                 .padding()
             }
@@ -66,17 +66,12 @@ struct PokemonListView: View {
 private struct PokemonListItem: View {
     @EnvironmentObject var coordinator: Coordinator
     let pokemon: Pokemon
-    let isLast: Bool
-    let onAppear: () -> Void
 
     var body: some View {
         Button {
             coordinator.showDetail(pokemon: pokemon)
         } label: {
             PokemonCardView(pokemon: pokemon)
-        }
-        .onAppear {
-            if isLast { onAppear() }
         }
         .transition(.opacity.combined(with: .scale(scale: 0.95)))
         .animation(.easeInOut(duration: 0.3), value: pokemon.id)

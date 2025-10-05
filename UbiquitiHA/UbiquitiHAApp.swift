@@ -29,7 +29,6 @@ struct UbiquitiHAApp: App {
             let coordinator = Coordinator()
             RootView()
                 .environmentObject(coordinator)
-                .modelContainer(sharedModelContainer)
         }
     }
     
@@ -38,9 +37,45 @@ struct UbiquitiHAApp: App {
     }
     
     private func setupDependencies() {
-        DIContainer.shared.registerAll()
+        DIContainer.shared.register(NetworkMonitorProtocol.self) {
+            NetworkMonitor.shared
+        }
+        
+        DIContainer.shared.register(NetworkServiceProtocol.self) {
+            NetworkService()
+        }
+        
+        DIContainer.shared.register(PokemonRemoteDataSourceProtocol.self) {
+            PokemonRemoteDataSource(networkService: DIContainer.shared.resolve())
+        }
+        
+        DIContainer.shared.register(PokemonCacheServiceProtocol.self) {
+            PokemonCacheService(databaseService: DIContainer.shared.resolve())
+        }
+        
+        DIContainer.shared.register(PokemonListRepositoryProtocol.self) {
+            PokemonListRepository(remoteDataSource: DIContainer.shared.resolve(),
+                                  cacheService: DIContainer.shared.resolve(),
+                                  networkMonitor: DIContainer.shared.resolve()
+            )
+        }
+        
+        DIContainer.shared.register(PokemonDetailsRepository.self) {
+            PokemonDetailsRepository(remoteDataSource: DIContainer.shared.resolve(),
+                                     cacheService: DIContainer.shared.resolve(),
+                                     networkMonitor: DIContainer.shared.resolve())
+        }
+        
+        DIContainer.shared.register(LoadPokemonsUseCaseProtocol.self) {
+            LoadPokemonsUseCase(repository: DIContainer.shared.resolve())
+        }
+        
+        DIContainer.shared.register(LoadPokemonDescriptionUseCaseProtocol.self) {
+            LoadPokemonDescriptionUseCase(repository: DIContainer.shared.resolve())
+        }
+        
         DIContainer.shared.register(DatabaseServiceProtocol.self) {
-            DatabaseService(context: sharedModelContainer.mainContext)
+            DatabaseService(container: sharedModelContainer)
         }
     }
 }

@@ -9,36 +9,78 @@ import Foundation
 import SwiftData
 
 protocol DatabaseServiceProtocol {
-    func create<T: DatabaseModel>(_ model: T) throws
-    func fetch<T: DatabaseModel>(of type: T.Type, sortDescriptors: [SortDescriptor<T>]) throws -> [T]
-    func update(_ block: () throws -> Void) throws
-    func delete<T: DatabaseModel>(_ model: T) throws
+    func create<T: DatabaseModel>(_ model: T) async throws
+    func fetch<T: DatabaseModel>(of type: T.Type,
+                                 sortDescriptors: [SortDescriptor<T>]) async throws -> [T]
+    func update(_ block: (_ ctx: ModelContext) throws -> Void) async throws
+    func delete<T: DatabaseModel>(_ model: T) async throws
 }
 
 final class DatabaseService: DatabaseServiceProtocol {
-    private let context: ModelContext
+    private let container: ModelContainer
 
-    init(context: ModelContext) {
-        self.context = context
-    }
-
-    func create<T: DatabaseModel>(_ model: T) throws {
-        context.insert(model)
-        try context.save()
+    init(container: ModelContainer) {
+        self.container = container
     }
 
-    func fetch<T: DatabaseModel>(of type: T.Type, sortDescriptors: [SortDescriptor<T>] = []) throws -> [T] {
-        let descriptor = FetchDescriptor<T>(sortBy: sortDescriptors)
-        return try context.fetch(descriptor)
+    // MARK: - Background actors
+
+    actor Reader {
+        private let ctx: ModelContext
+        init(container: ModelContainer) {
+            ctx = ModelContext(container)
+            ctx.autosaveEnabled = false
+        }
+
+        func fetch<T: DatabaseModel>(of type: T.Type,
+                                     sort: [SortDescriptor<T>]) throws -> [T] {
+            let fd = FetchDescriptor<T>(sortBy: sort)
+            return try ctx.fetch(fd)
+        }
     }
-    
-    func update(_ block: () throws -> Void) throws {
-        try block()
-        try context.save()
+
+    actor Writer {
+        private let ctx: ModelContext
+        init(container: ModelContainer) {
+            ctx = ModelContext(container)
+            ctx.autosaveEnabled = false
+        }
+
+        func insert<T: DatabaseModel>(_ model: T) throws {
+            ctx.insert(model)
+            try ctx.save()
+        }
+
+        func delete<T: DatabaseModel>(_ model: T) throws {
+            ctx.delete(model)
+            try ctx.save()
+        }
+
+        func perform(_ block: (_ ctx: ModelContext) throws -> Void) throws {
+            try block(ctx)
+            try ctx.save()
+        }
     }
-    
-    func delete<T: DatabaseModel>(_ model: T) throws {
-        context.delete(model)
-        try context.save()
+
+    private lazy var reader = Reader(container: container)
+    private lazy var writer = Writer(container: container)
+
+    // MARK: - API
+
+    func create<T: DatabaseModel>(_ model: T) async throws {
+        try await writer.insert(model)
+    }
+
+    func fetch<T: DatabaseModel>(of type: T.Type,
+                                 sortDescriptors: [SortDescriptor<T>] = []) async throws -> [T] {
+        try await reader.fetch(of: type, sort: sortDescriptors)
+    }
+
+    func update(_ block: (_ ctx: ModelContext) throws -> Void) async throws {
+        try await writer.perform(block)
+    }
+
+    func delete<T: DatabaseModel>(_ model: T) async throws {
+        try await writer.delete(model)
     }
 }
