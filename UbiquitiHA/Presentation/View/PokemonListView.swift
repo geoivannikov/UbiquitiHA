@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct PokemonListView: View {
+struct PokemonListView<ViewModel: PokemonListViewModelProtocol>: View {
     @EnvironmentObject private var coordinator: Coordinator
-    @StateObject private var viewModel: PokemonListViewModel
+    @StateObject private var viewModel: ViewModel
 
-    init(viewModel: PokemonListViewModel = PokemonListViewModel()) {
+    init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
@@ -76,4 +76,78 @@ private struct PokemonListItem: View {
         .transition(.opacity.combined(with: .scale(scale: 0.95)))
         .animation(.easeInOut(duration: 0.3), value: pokemon.id)
     }
+}
+
+// MARK: - Preview
+
+#Preview("With Pokemons") {
+    let mockPokemons = [
+        Pokemon(id: 1, name: "Pikachu", number: "#001", types: ["Electric"], imageData: nil, height: 40, weight: 6, baseExperience: 112),
+        Pokemon(id: 2, name: "Charmander", number: "#004", types: ["Fire"], imageData: nil, height: 60, weight: 8, baseExperience: 62),
+        Pokemon(id: 3, name: "Squirtle", number: "#007", types: ["Water"], imageData: nil, height: 50, weight: 9, baseExperience: 63),
+        Pokemon(id: 4, name: "Bulbasaur", number: "#001", types: ["Grass", "Poison"], imageData: nil, height: 70, weight: 6, baseExperience: 64),
+        Pokemon(id: 5, name: "Caterpie", number: "#010", types: ["Bug"], imageData: nil, height: 30, weight: 3, baseExperience: 39),
+        Pokemon(id: 6, name: "Weedle", number: "#013", types: ["Bug", "Poison"], imageData: nil, height: 30, weight: 3, baseExperience: 39)
+    ]
+    
+    let mockViewModel = MockPokemonListViewModel(pokemons: mockPokemons)
+    
+    return NavigationStack {
+        PokemonListView<MockPokemonListViewModel>(viewModel: mockViewModel)
+    }
+    .environmentObject(Coordinator())
+}
+
+#Preview("Loading State") {
+    let mockViewModel = MockPokemonListViewModel(pokemons: [], isLoading: true)
+    
+    return NavigationStack {
+        PokemonListView<MockPokemonListViewModel>(viewModel: mockViewModel)
+    }
+    .environmentObject(Coordinator())
+}
+
+#Preview("Empty State") {
+    let mockViewModel = MockPokemonListViewModel(pokemons: [])
+    
+    return NavigationStack {
+        PokemonListView<MockPokemonListViewModel>(viewModel: mockViewModel)
+    }
+    .environmentObject(Coordinator())
+}
+
+#Preview("Network Status") {
+    let mockPokemons = [
+        Pokemon(id: 1, name: "Pikachu", number: "#001", types: ["Electric"], imageData: nil, height: 40, weight: 6, baseExperience: 112),
+        Pokemon(id: 2, name: "Charmander", number: "#004", types: ["Fire"], imageData: nil, height: 60, weight: 8, baseExperience: 62)
+    ]
+    
+    let mockViewModel = MockPokemonListViewModel(
+        pokemons: mockPokemons,
+        showNetworkStatus: true
+    )
+    mockViewModel.networkStatusMessage = "No internet connection"
+    
+    return NavigationStack {
+        PokemonListView<MockPokemonListViewModel>(viewModel: mockViewModel)
+    }
+    .environmentObject(Coordinator())
+}
+
+// MARK: - Mock ViewModel for Preview
+fileprivate class MockPokemonListViewModel: PokemonListViewModelProtocol {
+    @Published var pokemons: [Pokemon] = []
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
+    @Published var isConnected: Bool = true
+    @Published var showNetworkStatus: Bool = false
+    @Published var networkStatusMessage: String = ""
+    
+    init(pokemons: [Pokemon] = [], isLoading: Bool = false, showNetworkStatus: Bool = false) {
+        self.pokemons = pokemons
+        self.isLoading = isLoading
+        self.showNetworkStatus = showNetworkStatus
+    }
+    
+    func loadNextPage() async {}
 }

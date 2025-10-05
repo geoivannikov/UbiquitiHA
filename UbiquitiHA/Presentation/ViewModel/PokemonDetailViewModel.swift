@@ -8,7 +8,15 @@
 import Foundation
 import SwiftUI
 
-final class PokemonDetailViewModel: ObservableObject {
+protocol PokemonDetailViewModelProtocol: ObservableObject {
+    var details: PokemonDetails { get }
+    var isLoading: Bool { get }
+    var errorMessage: String? { get set }
+    var backgroundColor: Color { get }
+    func load() async
+}
+
+final class PokemonDetailViewModel: PokemonDetailViewModelProtocol {
     // MARK: - Public State
 
     @Published private(set) var details = PokemonDetails()

@@ -14,9 +14,12 @@ struct PokemonCardView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(pokemon.name)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(.white)
+                    .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 ForEach(pokemon.types, id: \.self) { type in
                     Text(type).typeTag()
@@ -46,4 +49,39 @@ struct PokemonCardView: View {
         }
         .cardStyle(background: pokemon.backgroundColor)
     }
+}
+
+// MARK: - Preview
+#Preview("Electric Type") {
+    let mockPokemon = Pokemon(
+        id: 1,
+        name: "Pikachu",
+        number: "#001",
+        types: ["Electric"],
+        imageData: nil,
+        height: 40,
+        weight: 6,
+        baseExperience: 112
+    )
+    
+    return PokemonCardView(pokemon: mockPokemon)
+        .frame(width: 180, height: 120)
+        .padding()
+}
+
+#Preview("Fire Type With Long Name") {
+    let mockPokemon = Pokemon(
+        id: 4,
+        name: "Charmander Long name",
+        number: "#004",
+        types: ["Fire"],
+        imageData: nil,
+        height: 60,
+        weight: 8,
+        baseExperience: 62
+    )
+    
+    return PokemonCardView(pokemon: mockPokemon)
+        .frame(width: 180, height: 120)
+        .padding()
 }

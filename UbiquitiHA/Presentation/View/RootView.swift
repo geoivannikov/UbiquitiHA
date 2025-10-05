@@ -12,14 +12,20 @@ struct RootView: View {
 
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            PokemonListView()
+            PokemonListView<PokemonListViewModel>(viewModel: PokemonListViewModel())
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .detail(let pokemon):
                         let detailVM = PokemonDetailViewModel(pokemon: pokemon)
-                        PokemonDetailView(viewModel: detailVM)
+                        PokemonDetailView<PokemonDetailViewModel>(viewModel: detailVM)
                     }
                 }
         }
     }
+}
+
+// MARK: - Preview
+#Preview {
+    RootView()
+        .environmentObject(Coordinator())
 }

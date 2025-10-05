@@ -7,7 +7,17 @@
 
 import Foundation
 
-final class PokemonListViewModel: ObservableObject {
+protocol PokemonListViewModelProtocol: ObservableObject {
+    var pokemons: [Pokemon] { get }
+    var isLoading: Bool { get }
+    var errorMessage: String? { get set }
+    var isConnected: Bool { get }
+    var showNetworkStatus: Bool { get }
+    var networkStatusMessage: String { get }
+    func loadNextPage() async
+}
+
+final class PokemonListViewModel: PokemonListViewModelProtocol {
     // MARK: - Public State
 
     @Published private(set) var pokemons: [Pokemon] = []

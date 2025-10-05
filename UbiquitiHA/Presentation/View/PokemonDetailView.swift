@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct PokemonDetailView: View {
+struct PokemonDetailView<ViewModel: PokemonDetailViewModelProtocol>: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var viewModel: PokemonDetailViewModel
+    @StateObject private var viewModel: ViewModel
 
-    init(viewModel: PokemonDetailViewModel) {
+    init(viewModel: ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
@@ -154,4 +154,109 @@ private struct TypeSection: View {
             }
         }
     }
+}
+
+// MARK: - Preview
+
+#Preview {
+    let mockPokemon = Pokemon(
+        id: 1,
+        name: "Pikachu",
+        number: "#001",
+        types: ["Electric"],
+        imageData: nil,
+        height: 40,
+        weight: 6,
+        baseExperience: 112
+    )
+    
+    let mockDetails = PokemonDetails(
+        id: 1,
+        name: "Pikachu",
+        description: "When several of these Pokémon gather, their electricity could build and cause lightning storms.",
+        weight: 6,
+        height: 40,
+        baseExperience: 112,
+        species: "Mouse Pokémon",
+        types: ["Electric"],
+        formsCount: 2
+    )
+    
+    let mockViewModel = MockPokemonDetailViewModel(
+        pokemon: mockPokemon,
+        details: mockDetails,
+        isLoading: false
+    )
+    
+    return NavigationStack {
+        PokemonDetailView<MockPokemonDetailViewModel>(viewModel: mockViewModel)
+    }
+}
+
+#Preview("No Pokemon Found") {
+    let mockPokemon = Pokemon(
+        id: 999,
+        name: "Unknown",
+        number: "#999",
+        types: ["Unknown"],
+        imageData: nil,
+        height: 0,
+        weight: 0,
+        baseExperience: 0
+    )
+
+    let emptyDetails = PokemonDetails()
+    
+    let mockViewModel = MockPokemonDetailViewModel(
+        pokemon: mockPokemon,
+        details: emptyDetails,
+        isLoading: false
+    )
+    
+    return NavigationStack {
+        PokemonDetailView<MockPokemonDetailViewModel>(viewModel: mockViewModel)
+    }
+}
+
+#Preview("Loading State") {
+    let mockPokemon = Pokemon(
+        id: 1,
+        name: "Pikachu",
+        number: "#001",
+        types: ["Electric"],
+        imageData: nil,
+        height: 40,
+        weight: 6,
+        baseExperience: 112
+    )
+    
+    let emptyDetails = PokemonDetails()
+    
+    let mockViewModel = MockPokemonDetailViewModel(
+        pokemon: mockPokemon,
+        details: emptyDetails,
+        isLoading: true
+    )
+    
+    return NavigationStack {
+        PokemonDetailView<MockPokemonDetailViewModel>(viewModel: mockViewModel)
+    }
+}
+
+// MARK: - Mock ViewModel for Preview
+fileprivate class MockPokemonDetailViewModel: PokemonDetailViewModelProtocol {
+    @Published var details: PokemonDetails
+    @Published var isLoading: Bool
+    @Published var errorMessage: String?
+    
+    var backgroundColor: Color { pokemon.backgroundColor }
+    private let pokemon: Pokemon
+    
+    init(pokemon: Pokemon, details: PokemonDetails, isLoading: Bool = false) {
+        self.pokemon = pokemon
+        self.details = details
+        self.isLoading = isLoading
+    }
+    
+    func load() async {}
 }

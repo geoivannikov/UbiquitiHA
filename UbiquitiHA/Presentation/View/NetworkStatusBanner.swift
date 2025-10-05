@@ -30,3 +30,20 @@ struct NetworkStatusBanner: View {
         .padding(.bottom, 20)
     }
 }
+
+// MARK: - Preview
+#Preview("No Connection") {
+    VStack {
+        Spacer()
+        NetworkStatusBanner(message: "No internet connection")
+    }
+    .background(Color.black)
+}
+
+#Preview("Connection Restored") {
+    VStack {
+        Spacer()
+        NetworkStatusBanner(message: "Connection restored")
+    }
+    .background(Color.black)
+}
