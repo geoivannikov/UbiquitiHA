@@ -63,7 +63,7 @@ final class PokemonListViewModel: ObservableObject {
         networkStatusMessage = isConnected ? "🌐 Connected" : "📶 No Internet"
         showNetworkStatus = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + PaginationConstants.networkBannerDisplayDuration) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.networkBannerDisplayDuration) { [weak self] in
             self?.showNetworkStatus = false
         }
     }
@@ -71,7 +71,7 @@ final class PokemonListViewModel: ObservableObject {
     // MARK: - Public Methods
 
     func loadNextPage() async {
-        if offset == PaginationConstants.initialOffset, !networkMonitor.isConnected {
+        if offset == Constants.initialOffset, !networkMonitor.isConnected {
             await MainActor.run { errorMessage = PokemonError.noConnection.errorDescription }
         }
         
