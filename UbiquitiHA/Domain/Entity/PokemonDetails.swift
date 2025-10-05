@@ -19,7 +19,7 @@ struct PokemonDetails {
     let formsCount: Int
 }
 
-// MARK: - Init with Data
+// MARK: - Custom Inits
 
 extension PokemonDetails {
     init(pokemon: Pokemon, pokemonSpeciesResponse: PokemonSpeciesResponse) {
@@ -32,6 +32,20 @@ extension PokemonDetails {
         self.species = pokemonSpeciesResponse.genus
         self.types = pokemon.types
         self.formsCount = pokemonSpeciesResponse.formsCount
+    }
+}
+
+extension PokemonDetails {
+    init(pokemon: Pokemon, model: PokemonDescriptionModel) {
+        self.id = pokemon.id
+        self.name = pokemon.name
+        self.description = model.pokemonDescription ?? ""
+        self.weight = pokemon.weight
+        self.height = pokemon.height
+        self.baseExperience = pokemon.baseExperience
+        self.species = ""
+        self.types = pokemon.types
+        self.formsCount = 0
     }
 }
 

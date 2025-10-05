@@ -13,6 +13,7 @@ struct UbiquitiHAApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             PokemonModel.self,
+            PokemonDescriptionModel.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

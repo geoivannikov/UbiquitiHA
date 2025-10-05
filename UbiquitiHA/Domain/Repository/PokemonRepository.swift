@@ -22,7 +22,6 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         self.localDataSource = localDataSource
     }
     
-    
     // MARK: - Pokemon List Operations
     
     func fetchPokemons(offset: Int, limit: Int) async throws -> [Pokemon] {
@@ -128,16 +127,16 @@ final class PokemonRepository: PokemonRepositoryProtocol {
         return paginatedPokemons.map(Pokemon.init)
     }
     
+    // MARK: - Pokemon Details Operations
+    
     func fetchPokemonDetails(pokemon: Pokemon) async throws -> PokemonDetails {
         do {
             let speciesResponse = try await remoteDataSource.fetchPokemonDescription(name: pokemon.name)
             let pokemonDetails = PokemonDetails(pokemon: pokemon, pokemonSpeciesResponse: speciesResponse)
             
-            let detailsModel = PokemonDetailsModel(
+            let detailsModel = PokemonDescriptionModel(
                 pokemonId: pokemon.id,
-                description: pokemonDetails.description,
-                abilities: [],
-                stats: [:]
+                description: pokemonDetails.description
             )
             try localDataSource.savePokemonDetails(detailsModel)
             
@@ -147,17 +146,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
                 throw RepositoryError.apiFailedNoCache
             }
             
-            return PokemonDetails(
-                id: pokemon.id,
-                name: pokemon.name,
-                description: cachedDetails.pokemonDescription ?? "",
-                weight: pokemon.weight,
-                height: pokemon.height,
-                baseExperience: pokemon.baseExperience,
-                species: "",
-                types: pokemon.types,
-                formsCount: 0
-            )
+            return PokemonDetails(pokemon: pokemon, model: cachedDetails)
         }
     }
 }

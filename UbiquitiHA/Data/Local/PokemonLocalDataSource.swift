@@ -12,8 +12,8 @@ protocol PokemonLocalDataSourceProtocol {
     func savePokemon(_ pokemon: PokemonModel) throws
     func fetchPokemons() throws -> [PokemonModel]
     func fetchPokemon(by id: Int) throws -> PokemonModel?
-    func savePokemonDetails(_ details: PokemonDetailsModel) throws
-    func fetchPokemonDetails(by pokemonId: Int) throws -> PokemonDetailsModel?
+    func savePokemonDetails(_ details: PokemonDescriptionModel) throws
+    func fetchPokemonDetails(by pokemonId: Int) throws -> PokemonDescriptionModel?
 }
 
 final class PokemonLocalDataSource: PokemonLocalDataSourceProtocol {
@@ -40,12 +40,12 @@ final class PokemonLocalDataSource: PokemonLocalDataSourceProtocol {
     
     // MARK: - PokemonDetails Methods
     
-    func savePokemonDetails(_ details: PokemonDetailsModel) throws {
+    func savePokemonDetails(_ details: PokemonDescriptionModel) throws {
         try databaseService.create(details)
     }
     
-    func fetchPokemonDetails(by pokemonId: Int) throws -> PokemonDetailsModel? {
-        let details = try databaseService.fetch(of: PokemonDetailsModel.self, sortDescriptors: [])
+    func fetchPokemonDetails(by pokemonId: Int) throws -> PokemonDescriptionModel? {
+        let details = try databaseService.fetch(of: PokemonDescriptionModel.self, sortDescriptors: [])
         return details.lazy.first { $0.pokemonId == pokemonId }
     }
 }

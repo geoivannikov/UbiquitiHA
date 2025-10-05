@@ -13,7 +13,7 @@ final class PokemonModel: DatabaseModel {
     @Attribute(.unique) var id: Int
     var name: String
     var number: String
-    var types: [String]
+    var typesData: String = "[]"
     var imageData: Data?
     var height: Int
     var weight: Int
@@ -24,11 +24,24 @@ final class PokemonModel: DatabaseModel {
         self.id = id
         self.name = name
         self.number = number
-        self.types = types
+        self.typesData = (try? JSONEncoder().encode(types).base64EncodedString()) ?? "[]"
         self.imageData = imageData
         self.height = height
         self.weight = weight
         self.baseExperience = baseExperience
+    }
+    
+    var types: [String] {
+        get {
+            guard let data = Data(base64Encoded: typesData),
+                  let decoded = try? JSONDecoder().decode([String].self, from: data) else {
+                return []
+            }
+            return decoded
+        }
+        set {
+            typesData = (try? JSONEncoder().encode(newValue).base64EncodedString()) ?? "[]"
+        }
     }
 }
 
