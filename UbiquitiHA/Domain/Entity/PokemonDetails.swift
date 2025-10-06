@@ -19,7 +19,13 @@ struct PokemonDetails {
     let formsCount: Int
 }
 
-// MARK: - Custom Inits
+extension PokemonDetails {
+    var isEmpty: Bool {
+        description == ""
+    }
+}
+
+// MARK: - Mapping
 
 extension PokemonDetails {
     init(pokemon: Pokemon, pokemonSpeciesResponse: PokemonSpeciesResponse) {
@@ -39,17 +45,15 @@ extension PokemonDetails {
     init(pokemon: Pokemon, model: PokemonDescriptionModel) {
         self.id = pokemon.id
         self.name = pokemon.name
-        self.description = model.pokemonDescription ?? ""
-        self.weight = pokemon.weight
-        self.height = pokemon.height
-        self.baseExperience = pokemon.baseExperience
-        self.species = ""
-        self.types = pokemon.types
-        self.formsCount = 0
+        self.description = model.pokemonDescription
+        self.weight = model.weight
+        self.height = model.height
+        self.baseExperience = model.baseExperience
+        self.species = model.species
+        self.types = model.types
+        self.formsCount = model.formsCount
     }
 }
-
-// MARK: - Empty Init
 
 extension PokemonDetails {
     init() {
@@ -62,11 +66,5 @@ extension PokemonDetails {
         self.species = ""
         self.types = []
         self.formsCount = 0
-    }
-}
-
-extension PokemonDetails {
-    var isEmpty: Bool {
-        description == ""
     }
 }

@@ -62,7 +62,6 @@ struct PokemonListView<ViewModel: PokemonListViewModelProtocol>: View {
     }
 }
 
-
 private struct PokemonListItem: View {
     @EnvironmentObject var coordinator: Coordinator
     let pokemon: Pokemon

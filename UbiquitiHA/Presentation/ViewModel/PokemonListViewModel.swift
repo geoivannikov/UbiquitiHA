@@ -18,8 +18,6 @@ protocol PokemonListViewModelProtocol: ObservableObject {
 }
 
 final class PokemonListViewModel: PokemonListViewModelProtocol {
-    // MARK: - Public State
-
     @Published private(set) var pokemons: [Pokemon] = []
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
@@ -27,19 +25,13 @@ final class PokemonListViewModel: PokemonListViewModelProtocol {
     @Published var showNetworkStatus = false
     @Published var networkStatusMessage = ""
 
-    // MARK: - Dependencies
-
     @Inject private var loadUseCase: LoadPokemonsUseCaseProtocol
     @Inject private var networkMonitor: NetworkMonitorProtocol
-
-    // MARK: - Paging
 
     private(set) var offset = Constants.initialOffset
     private let pageSize = Constants.defaultPageSize
     private var networkCallbackId: UUID?
-
-    // MARK: - Init
-
+    
     init() {
         self.isConnected = networkMonitor.isConnected
         
@@ -67,7 +59,6 @@ final class PokemonListViewModel: PokemonListViewModelProtocol {
         }
     }
 
-    // MARK: - Private Methods
     @MainActor
     private func showNetworkStatusBanner() {
         networkStatusMessage = isConnected ? "🌐 Connected" : "📶 No Internet"
@@ -77,8 +68,6 @@ final class PokemonListViewModel: PokemonListViewModelProtocol {
             self?.showNetworkStatus = false
         }
     }
-
-    // MARK: - Public Methods
 
     func loadNextPage() async {
         if offset == Constants.initialOffset, !networkMonitor.isConnected {

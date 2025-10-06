@@ -17,25 +17,18 @@ protocol PokemonDetailViewModelProtocol: ObservableObject {
 }
 
 final class PokemonDetailViewModel: PokemonDetailViewModelProtocol {
-    // MARK: - Public State
-
     @Published private(set) var details = PokemonDetails()
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
-
-    // MARK: - Dependencies
-
+    
     @Inject private var loadUseCase: LoadPokemonDescriptionUseCaseProtocol
+    
     var backgroundColor: Color { pokemon.backgroundColor }
     private let pokemon: Pokemon
-
-    // MARK: - Init
 
     init(pokemon: Pokemon) {
         self.pokemon = pokemon
     }
-
-    // MARK: - Public Methods
 
     func load() async {
         guard await MainActor.run(body: { !isLoading }) else { return }

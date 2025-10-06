@@ -48,11 +48,8 @@ final class PokemonDetailsRepository: PokemonDetailsRepositoryProtocol {
     private func fetchPokemonDetailsFromAPI(pokemon: Pokemon) async throws -> PokemonDetails {
         let speciesResponse = try await remoteDataSource.fetchPokemonDescription(name: pokemon.name)
         let pokemonDetails = PokemonDetails(pokemon: pokemon, pokemonSpeciesResponse: speciesResponse)
+        let detailsModel = PokemonDescriptionModel(details: pokemonDetails)
         
-        let detailsModel = PokemonDescriptionModel(
-            pokemonId: pokemon.id,
-            description: pokemonDetails.description
-        )
         try await cacheService.savePokemonDetails(detailsModel)
         
         return pokemonDetails

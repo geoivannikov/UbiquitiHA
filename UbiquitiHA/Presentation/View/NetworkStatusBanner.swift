@@ -37,6 +37,7 @@ struct NetworkStatusBanner: View {
         Spacer()
         NetworkStatusBanner(message: "No internet connection")
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.black)
 }
 
@@ -45,5 +46,6 @@ struct NetworkStatusBanner: View {
         Spacer()
         NetworkStatusBanner(message: "Connection restored")
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.black)
 }
