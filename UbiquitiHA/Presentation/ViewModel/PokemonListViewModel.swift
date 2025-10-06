@@ -69,32 +69,32 @@ final class PokemonListViewModel: PokemonListViewModelProtocol {
         }
     }
 
+    @MainActor
     func loadNextPage() async {
         if offset == Constants.initialOffset, !networkMonitor.isConnected {
             await MainActor.run { errorMessage = PokemonError.noConnection.errorDescription }
         }
         
-        guard await MainActor.run(body: { !isLoading }) else { return }
-
-        await MainActor.run { isLoading = true }
+        guard !isLoading else { return }
+        isLoading = true
 
         defer {
-            Task { await MainActor.run { isLoading = false } }
+            isLoading = false
         }
 
         do {
-            let newPokemons = try await loadUseCase.execute(offset: offset, limit: pageSize)
+            let newPokemons = try await Task.detached {
+                try await self.loadUseCase.execute(offset: self.offset, limit: self.pageSize)
+            }.value
+            
             let existingIds = Set(pokemons.map { $0.id })
             let uniqueNewPokemons = newPokemons.filter { !existingIds.contains($0.id) }
 
-            await MainActor.run {
-                pokemons.append(contentsOf: uniqueNewPokemons)
-                offset = pokemons.count
-            }
+            pokemons.append(contentsOf: uniqueNewPokemons)
+            offset = pokemons.count
+            errorMessage = nil
         } catch {
-            await MainActor.run {
-                errorMessage = error.localizedDescription
-            }
+            errorMessage = error.localizedDescription
         }
     }
 }

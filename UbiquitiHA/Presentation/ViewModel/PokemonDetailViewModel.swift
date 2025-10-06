@@ -30,29 +30,24 @@ final class PokemonDetailViewModel: PokemonDetailViewModelProtocol {
         self.pokemon = pokemon
     }
 
+    @MainActor
     func load() async {
-        guard await MainActor.run(body: { !isLoading }) else { return }
-
-        await MainActor.run { isLoading = true }
+        guard !isLoading else { return }
+        isLoading = true
 
         defer {
-            Task {
-                await MainActor.run {
-                    isLoading = false
-                }
-            }
+            isLoading = false
         }
 
         do {
-            let result = try await loadUseCase.execute(pokemon: pokemon)
+            let result = try await Task.detached {
+                try await self.loadUseCase.execute(pokemon: self.pokemon)
+            }.value
 
-            await MainActor.run {
-                details = result
-            }
+            details = result
+            errorMessage = nil
         } catch {
-            await MainActor.run {
-                errorMessage = error.localizedDescription
-            }
+            errorMessage = error.localizedDescription
         }
     }
 }
