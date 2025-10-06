@@ -49,11 +49,23 @@ struct TestDataFactory {
     
     static func createPokemonDescriptionModel(
         pokemonId: Int = 1,
-        description: String = "A mouse Pokémon"
+        description: String = "A mouse Pokémon",
+        weight: Int = 60,
+        height: Int = 4,
+        baseExperience: Int = 112,
+        species: String = "Mouse Pokémon",
+        formsCount: Int = 1,
+        types: [String] = ["Electric"]
     ) -> PokemonDescriptionModel {
         return PokemonDescriptionModel(
             pokemonId: pokemonId,
-            description: description
+            description: description,
+            weight: weight,
+            height: height,
+            baseExperience: baseExperience,
+            species: species,
+            formsCount: formsCount,
+            types: types
         )
     }
     

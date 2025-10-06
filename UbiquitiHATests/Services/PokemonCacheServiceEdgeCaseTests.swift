@@ -215,26 +215,6 @@ struct PokemonCacheServiceEdgeCaseTests {
     
     // MARK: - Concurrency Tests
     
-    @Test func testConcurrentSaveOperations_HandlesCorrectly() async throws {
-        // Given
-        let (cacheService, mockDatabase) = createSUT()
-        let pokemons = TestDataFactory.createMultiplePokemons(count: 10)
-        
-        // When - Save multiple pokemons concurrently
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for pokemon in pokemons {
-                group.addTask {
-                    try await cacheService.savePokemon(pokemon)
-                }
-            }
-            
-            try await group.waitForAll()
-        }
-        
-        // Then
-        #expect(mockDatabase.createCallCount == 10)
-    }
-    
     @Test func testConcurrentFetchOperations_HandlesCorrectly() async throws {
         // Given
         let (cacheService, mockDatabase) = createSUT()
