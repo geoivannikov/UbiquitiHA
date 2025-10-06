@@ -92,7 +92,6 @@ final class PokemonListViewModel: PokemonListViewModelProtocol {
 
             pokemons.append(contentsOf: uniqueNewPokemons)
             offset = pokemons.count
-            errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
         }
