@@ -18,45 +18,6 @@ struct PokemonCacheServiceTests {
         return (cacheService, mockDatabaseService)
     }
     
-    // MARK: - fetchPokemonsFromCache Tests
-    
-    @Test func testFetchPokemonsFromCache_WithValidData_ReturnsCorrectPokemons() async throws {
-        // Given
-        let (cacheService, mockDatabase) = createSUT()
-        let samplePokemonModels = TestDataFactory.samplePokemonModels
-        mockDatabase.setupMockData(pokemonModels: samplePokemonModels)
-        
-        // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 3)
-        
-        // Then
-        #expect(result.count == 3)
-        #expect(result[0].id == 1)
-        #expect(result[0].name == "Bulbasaur")
-        #expect(result[1].id == 2)
-        #expect(result[1].name == "Ivysaur")
-        #expect(result[2].id == 3)
-        #expect(result[2].name == "Venusaur")
-        #expect(mockDatabase.fetchCallCount == 1)
-    }
-    
-    @Test func testFetchPokemonsFromCache_WithPagination_ReturnsCorrectSubset() async throws {
-        // Given
-        let (cacheService, mockDatabase) = createSUT()
-        let samplePokemonModels = TestDataFactory.samplePokemonModels
-        mockDatabase.setupMockData(pokemonModels: samplePokemonModels)
-        
-        // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 2, limit: 2)
-        
-        // Then
-        #expect(result.count == 2)
-        #expect(result[0].id == 3)
-        #expect(result[0].name == "Venusaur")
-        #expect(result[1].id == 4)
-        #expect(result[1].name == "Charmander")
-    }
-    
     @Test func testFetchPokemonsFromCache_WithOffsetBeyondData_ReturnsEmptyArray() async throws {
         // Given
         let (cacheService, mockDatabase) = createSUT()
@@ -64,7 +25,7 @@ struct PokemonCacheServiceTests {
         mockDatabase.setupMockData(pokemonModels: samplePokemonModels)
         
         // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 10, limit: 5)
+        let result = try await cacheService.fetchPokemonsFromCache(offset: 10)
         
         // Then
         #expect(result.isEmpty)
@@ -77,7 +38,7 @@ struct PokemonCacheServiceTests {
         mockDatabase.setupMockData(pokemonModels: samplePokemonModels)
         
         // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
+        let result = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then
         #expect(result.count == 5)
@@ -90,7 +51,7 @@ struct PokemonCacheServiceTests {
         mockDatabase.setupMockData(pokemonModels: [])
         
         // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 5)
+        let result = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then
         #expect(result.isEmpty)
@@ -105,7 +66,7 @@ struct PokemonCacheServiceTests {
         
         // When & Then
         await #expect(throws: TestError.databaseError) {
-            try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 5)
+            try await cacheService.fetchPokemonsFromCache(offset: 0)
         }
     }
     

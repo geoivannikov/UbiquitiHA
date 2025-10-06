@@ -28,10 +28,9 @@ final class MockPokemonCacheService: PokemonCacheServiceProtocol {
     var lastSavePokemon: Pokemon?
     var lastSavePokemonDetails: PokemonDescriptionModel?
     
-    func fetchPokemonsFromCache(offset: Int, limit: Int) async throws -> [Pokemon] {
+    func fetchPokemonsFromCache(offset: Int) async throws -> [Pokemon] {
         fetchPokemonsFromCacheCallCount += 1
         lastFetchPokemonsFromCacheOffset = offset
-        lastFetchPokemonsFromCacheLimit = limit
         
         switch fetchPokemonsFromCacheResult {
         case .success(let pokemons):

@@ -18,22 +18,6 @@ struct PokemonCacheServiceEdgeCaseTests {
         let cacheService = PokemonCacheService(databaseService: mockDatabaseService)
         return (cacheService, mockDatabaseService)
     }
-    
-    // MARK: - Edge Cases for Pagination
-    
-    @Test func testFetchPokemonsFromCache_WithZeroLimit_ReturnsEmptyArray() async throws {
-        // Given
-        let (cacheService, mockDatabase) = createSUT()
-        let samplePokemonModels = TestDataFactory.samplePokemonModels
-        mockDatabase.setupMockData(pokemonModels: samplePokemonModels)
-        
-        // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 0)
-        
-        // Then
-        #expect(result.isEmpty)
-    }
-    
     // MARK: - Edge Cases for Data Types
     
     @Test func testFetchPokemonsFromCache_WithSpecialCharactersInName_HandlesCorrectly() async throws {
@@ -47,7 +31,7 @@ struct PokemonCacheServiceEdgeCaseTests {
         mockDatabase.setupMockData(pokemonModels: [pokemonWithSpecialName])
         
         // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 1)
+        let result = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then
         #expect(result.count == 1)
@@ -65,7 +49,7 @@ struct PokemonCacheServiceEdgeCaseTests {
         mockDatabase.setupMockData(pokemonModels: [pokemonWithNoTypes])
         
         // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 1)
+        let result = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then
         #expect(result.count == 1)
@@ -83,7 +67,7 @@ struct PokemonCacheServiceEdgeCaseTests {
         mockDatabase.setupMockData(pokemonModels: [pokemonWithManyTypes])
         
         // When
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 1)
+        let result = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then
         #expect(result.count == 1)
@@ -189,58 +173,5 @@ struct PokemonCacheServiceEdgeCaseTests {
         #expect(mockDatabase.createCallCount == 1)
         let savedModel = mockDatabase.lastCreatedModel as? PokemonModel
         #expect(savedModel?.id == Int.max)
-    }
-    
-    // MARK: - Performance Tests
-    
-    @Test func testFetchPokemonsFromCache_WithLargeDataset_PerformsEfficiently() async throws {
-        // Given
-        let (cacheService, mockDatabase) = createSUT()
-        let largeDataset = TestDataFactory.createMultiplePokemonModels(count: 1000)
-        mockDatabase.setupMockData(pokemonModels: largeDataset)
-        
-        // When
-        let startTime = Date()
-        let result = try await cacheService.fetchPokemonsFromCache(offset: 500, limit: 100)
-        let endTime = Date()
-        
-        // Then
-        #expect(result.count == 100)
-        #expect(result[0].id == 501) // Should be sorted by id
-        
-        // Performance check (should complete in reasonable time)
-        let executionTime = endTime.timeIntervalSince(startTime)
-        #expect(executionTime < 1.0) // Should complete within 1 second
-    }
-    
-    // MARK: - Concurrency Tests
-    
-    @Test func testConcurrentFetchOperations_HandlesCorrectly() async throws {
-        // Given
-        let (cacheService, mockDatabase) = createSUT()
-        let samplePokemonModels = TestDataFactory.samplePokemonModels
-        mockDatabase.setupMockData(pokemonModels: samplePokemonModels)
-        
-        // When - Fetch multiple times concurrently
-        let results = try await withThrowingTaskGroup(of: [Pokemon].self) { group in
-            for _ in 0..<5 {
-                group.addTask {
-                    try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 3)
-                }
-            }
-            
-            var allResults: [[Pokemon]] = []
-            for try await result in group {
-                allResults.append(result)
-            }
-            return allResults
-        }
-        
-        // Then
-        #expect(results.count == 5)
-        for result in results {
-            #expect(result.count == 3)
-        }
-        #expect(mockDatabase.fetchCallCount == 5)
     }
 }

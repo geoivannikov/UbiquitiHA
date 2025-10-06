@@ -42,8 +42,7 @@ final class PokemonListRepository: PokemonListRepositoryProtocol {
     // MARK: - Private Methods
     
     private func fetchPokemonsFromCache(offset: Int, limit: Int) async throws -> [Pokemon] {
-        let pokemons = try await cacheService.fetchPokemonsFromCache(offset: offset, limit: limit)
-        
+        let pokemons = try await cacheService.fetchPokemonsFromCache(offset: offset)
         if pokemons.isEmpty && offset == 0 {
             throw PokemonError.noCache
         }

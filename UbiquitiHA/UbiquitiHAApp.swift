@@ -64,7 +64,7 @@ struct UbiquitiHAApp: App {
             )
         }
         
-        DIContainer.shared.register(PokemonDetailsRepository.self) {
+        DIContainer.shared.register(PokemonDetailsRepositoryProtocol.self) {
             PokemonDetailsRepository(remoteDataSource: DIContainer.shared.resolve(),
                                      cacheService: DIContainer.shared.resolve(),
                                      networkMonitor: DIContainer.shared.resolve())

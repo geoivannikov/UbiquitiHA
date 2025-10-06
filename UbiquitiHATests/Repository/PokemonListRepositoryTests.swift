@@ -152,7 +152,6 @@ final class PokemonListRepositoryTests: XCTestCase {
         // Verify cache fallback
         XCTAssertEqual(mockCacheService.fetchPokemonsFromCacheCallCount, 1)
         XCTAssertEqual(mockCacheService.lastFetchPokemonsFromCacheOffset, offset)
-        XCTAssertEqual(mockCacheService.lastFetchPokemonsFromCacheLimit, limit)
     }
     
     func testFetchPokemonsWhenConnectedAndAPIFailureThenCacheFailure() async {
@@ -204,7 +203,6 @@ final class PokemonListRepositoryTests: XCTestCase {
         // Verify cache was used
         XCTAssertEqual(mockCacheService.fetchPokemonsFromCacheCallCount, 1)
         XCTAssertEqual(mockCacheService.lastFetchPokemonsFromCacheOffset, offset)
-        XCTAssertEqual(mockCacheService.lastFetchPokemonsFromCacheLimit, limit)
     }
     
     func testFetchPokemonsWhenDisconnectedAndCacheFailure() async {

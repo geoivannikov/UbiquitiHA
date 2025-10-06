@@ -79,9 +79,7 @@ final class PokemonListViewModel: PokemonListViewModelProtocol {
         await MainActor.run { isLoading = true }
 
         defer {
-            Task {
-                await MainActor.run { isLoading = false }
-            }
+            Task { await MainActor.run { isLoading = false } }
         }
 
         do {
@@ -91,7 +89,7 @@ final class PokemonListViewModel: PokemonListViewModelProtocol {
 
             await MainActor.run {
                 pokemons.append(contentsOf: uniqueNewPokemons)
-                offset += pageSize
+                offset = pokemons.count
             }
         } catch {
             await MainActor.run {

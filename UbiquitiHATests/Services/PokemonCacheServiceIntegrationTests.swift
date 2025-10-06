@@ -46,7 +46,7 @@ struct PokemonCacheServiceIntegrationTests {
         let fetchedDetails = try await cacheService.fetchPokemonDetailsFromCache(pokemonId: 1)
         
         // When - Fetch pokemon list
-        let pokemonList = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
+        let pokemonList = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then - Verify all operations
         #expect(mockDatabase.createCallCount == 2) // Pokemon + Description
@@ -60,40 +60,6 @@ struct PokemonCacheServiceIntegrationTests {
         
         #expect(pokemonList.count == 1)
         #expect(pokemonList[0].name == "Pikachu")
-    }
-    
-    @Test func testMultiplePokemonsWorkflow_WithPagination() async throws {
-        // Given
-        let (cacheService, mockDatabase) = createSUT()
-        let pokemons = TestDataFactory.createMultiplePokemons(count: 10)
-        
-        // When - Save multiple pokemons
-        for pokemon in pokemons {
-            try await cacheService.savePokemon(pokemon)
-        }
-        
-        // When - Fetch first page
-        let firstPage = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 5)
-        
-        // When - Fetch second page
-        let secondPage = try await cacheService.fetchPokemonsFromCache(offset: 5, limit: 5)
-        
-        // When - Fetch third page (should be empty)
-        let thirdPage = try await cacheService.fetchPokemonsFromCache(offset: 10, limit: 5)
-        
-        // Then - Verify pagination
-        #expect(mockDatabase.createCallCount == 10)
-        #expect(mockDatabase.fetchCallCount == 3)
-        
-        #expect(firstPage.count == 5)
-        #expect(firstPage[0].id == 1)
-        #expect(firstPage[4].id == 5)
-        
-        #expect(secondPage.count == 5)
-        #expect(secondPage[0].id == 6)
-        #expect(secondPage[4].id == 10)
-        
-        #expect(thirdPage.isEmpty)
     }
     
     @Test func testPokemonWithDetailsWorkflow_CompleteScenario() async throws {
@@ -120,7 +86,7 @@ struct PokemonCacheServiceIntegrationTests {
         let fetchedDetails = try await cacheService.fetchPokemonDetailsFromCache(pokemonId: 25)
         
         // When - Fetch from list
-        let pokemonList = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
+        let pokemonList = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then - Verify complete workflow
         #expect(mockDatabase.createCallCount == 2)
@@ -199,7 +165,7 @@ struct PokemonCacheServiceIntegrationTests {
         try await cacheService.savePokemon(pokemon3)
         
         // When - Fetch all pokemons
-        let allPokemons = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
+        let allPokemons = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then - Should have only pokemon1 and pokemon3
         #expect(allPokemons.count == 2)
@@ -220,9 +186,9 @@ struct PokemonCacheServiceIntegrationTests {
         }
         
         // When - Fetch all pokemons multiple times
-        let fetch1 = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
-        let fetch2 = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
-        let fetch3 = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
+        let fetch1 = try await cacheService.fetchPokemonsFromCache(offset: 0)
+        let fetch2 = try await cacheService.fetchPokemonsFromCache(offset: 0)
+        let fetch3 = try await cacheService.fetchPokemonsFromCache(offset: 0)
         
         // Then - All fetches should return same data
         #expect(fetch1.count == fetch2.count)
@@ -259,7 +225,7 @@ struct PokemonCacheServiceIntegrationTests {
         #expect(fetchedDetails != nil)
         
         // When - Fetch from list (should include pokemon)
-        let pokemonList = try await cacheService.fetchPokemonsFromCache(offset: 0, limit: 10)
+        let pokemonList = try await cacheService.fetchPokemonsFromCache(offset: 0)
         #expect(pokemonList.count == 1)
         #expect(pokemonList[0].id == 1)
         

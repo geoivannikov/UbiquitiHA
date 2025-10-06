@@ -33,9 +33,7 @@ final class PokemonDetailViewModel: PokemonDetailViewModelProtocol {
     func load() async {
         guard await MainActor.run(body: { !isLoading }) else { return }
 
-        await MainActor.run {
-            isLoading = true
-        }
+        await MainActor.run { isLoading = true }
 
         defer {
             Task {

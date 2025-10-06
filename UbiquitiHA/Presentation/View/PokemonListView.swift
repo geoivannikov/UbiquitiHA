@@ -31,7 +31,7 @@ struct PokemonListView<ViewModel: PokemonListViewModelProtocol>: View {
                             .frame(minHeight: 120)
                     }
                     
-                    if viewModel.isLoading && !viewModel.pokemons.isEmpty {
+                    if viewModel.isLoading && !viewModel.pokemons.isEmpty && viewModel.isLoading {
                         ForEach(0..<Constants.loadingSkeletonCount, id: \.self) { _ in
                             ProgressView()
                                 .frame(minHeight: 120)
@@ -39,7 +39,12 @@ struct PokemonListView<ViewModel: PokemonListViewModelProtocol>: View {
                     }
                     Color.clear
                         .frame(height: 1)
-                        .onAppear { Task { await viewModel.loadNextPage() } }
+                        .onAppear { Task {
+                            guard !viewModel.pokemons.isEmpty else {
+                                return
+                            }
+                            await viewModel.loadNextPage() }
+                        }
                 }
                 .padding()
             }
