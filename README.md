@@ -10,7 +10,7 @@ A SwiftUI iOS application that fetches Pokemon data from the PokeAPI and display
 - **Networking**: URLSession with async/await
 - **Architecture**: MVVM + Clean Architecture
 - **Dependency Injection**: Custom DI Container
-- **Testing**: XCTest with Mock objects
+- **Testing**: XCTest
 - **API**: [PokeAPI](https://pokeapi.co/)
 
 ## Requirements
